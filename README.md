@@ -3,8 +3,8 @@ Look up downloads directory specific to different operating systems.
 
 # Supported platform
 
-- win32
-- darwin
+- windows
+- macos
 - linux
 
 # Install
