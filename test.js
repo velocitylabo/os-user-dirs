@@ -42,7 +42,7 @@ describe("os-downloads", () => {
             const configPath = path.join(tmpDir, "user-dirs.dirs");
             fs.writeFileSync(configPath, 'XDG_DOWNLOAD_DIR="/custom/downloads"\n');
             const result = getXDGDownloadDir(configPath);
-            assert.strictEqual(result, "/custom/downloads");
+            assert.strictEqual(result, path.normalize("/custom/downloads"));
         });
 
         it("parses XDG_DOWNLOAD_DIR among other entries", () => {
