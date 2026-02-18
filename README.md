@@ -1,10 +1,11 @@
-# os-downloads [![Build Status](https://travis-ci.org/piroz/os-downloads.svg?branch=master)](https://travis-ci.org/piroz/os-downloads)
+# os-downloads [![CI](https://github.com/piroz/os-downloads/actions/workflows/ci.yml/badge.svg)](https://github.com/piroz/os-downloads/actions/workflows/ci.yml)
 Look up downloads directory specific to different operating systems.
 
 # Supported platform
 
-- win32
-- darwin
+- windows
+- macos
+- linux
 
 # Install
 
