@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/piroz/os-downloads#readme",
   "devDependencies": {
-    "mocha": "^5.2.0"
+    "mocha": "^11.7.5"
   }
 }
