@@ -1,7 +1,7 @@
 {
   "name": "os-downloads",
   "version": "1.0.0",
-  "description": "Look up downloads directory specific to different operating systems.",
+  "description": "Get OS-specific user directories (Downloads, Desktop, Documents, Music, Pictures, Videos) with zero dependencies.",
   "main": "index.js",
   "scripts": {
     "test": "mocha test.js"
@@ -11,8 +11,17 @@
     "url": "git+https://github.com/piroz/os-downloads.git"
   },
   "keywords": [
-    "environment",
-    "downloads"
+    "os",
+    "directories",
+    "downloads",
+    "desktop",
+    "documents",
+    "music",
+    "pictures",
+    "videos",
+    "xdg",
+    "user-dirs",
+    "platform-folders"
   ],
   "author": "piroz",
   "license": "MIT",
