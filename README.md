@@ -18,8 +18,10 @@ $ npm install os-user-dirs
 
 ## Usage
 
+### ESM (recommended)
+
 ```javascript
-const { downloads, desktop, documents, music, pictures, videos, getPath } = require("os-user-dirs");
+import { downloads, desktop, documents, music, pictures, videos, getPath } from "os-user-dirs";
 
 downloads();
 //=> '/home/user/Downloads'
@@ -34,13 +36,38 @@ getPath("music");
 //=> '/home/user/Music'
 ```
 
+### CommonJS
+
+```javascript
+const { downloads, desktop, documents, music, pictures, videos, getPath } = require("os-user-dirs");
+
+downloads();
+//=> '/home/user/Downloads'
+```
+
 ### Default export (backward compatibility)
 
 ```javascript
+// ESM
+import downloads from "os-user-dirs";
+
+// CommonJS
 const downloads = require("os-user-dirs");
 
 downloads();
 //=> '/home/user/Downloads'
+```
+
+### TypeScript
+
+Full type definitions are included. `getPath()` accepts a union type for auto-completion:
+
+```typescript
+import { getPath } from "os-user-dirs";
+
+getPath("downloads"); // OK
+getPath("desktop");   // OK
+getPath("unknown");   // Type error
 ```
 
 ## API
