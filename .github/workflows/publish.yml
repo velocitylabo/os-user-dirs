@@ -2,20 +2,12 @@ name: Publish to npm
 
 on:
   push:
-    branches: [master]
+    tags:
+      - 'v*'
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm install
-      - run: npm test
-      - run: node test-esm.mjs
+    uses: ./.github/workflows/ci.yml
 
   publish:
     needs: test
@@ -29,5 +21,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          registry-url: https://registry.npmjs.org
-      - run: npm publish --provenance
+      - run: npm install -g npm@11
+      - run: npm publish --provenance --access public
