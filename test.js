@@ -12,6 +12,8 @@ const {
     music,
     pictures,
     videos,
+    templates,
+    publicshare,
 } = require("./");
 
 describe("os-user-dirs", () => {
@@ -37,6 +39,8 @@ describe("os-user-dirs", () => {
             { fn: music, name: "music" },
             { fn: pictures, name: "pictures" },
             { fn: videos, name: "videos" },
+            { fn: templates, name: "templates" },
+            { fn: publicshare, name: "publicshare" },
         ];
 
         cases.forEach(({ fn, name }) => {
@@ -58,6 +62,8 @@ describe("os-user-dirs", () => {
             assert.strictEqual(getPath("music"), music());
             assert.strictEqual(getPath("pictures"), pictures());
             assert.strictEqual(getPath("videos"), videos());
+            assert.strictEqual(getPath("templates"), templates());
+            assert.strictEqual(getPath("publicshare"), publicshare());
         });
 
         it("throws for unknown directory names", () => {
@@ -83,6 +89,8 @@ describe("os-user-dirs", () => {
             { key: "XDG_MUSIC_DIR", value: "Music" },
             { key: "XDG_PICTURES_DIR", value: "Pictures" },
             { key: "XDG_VIDEOS_DIR", value: "Videos" },
+            { key: "XDG_TEMPLATES_DIR", value: "Templates" },
+            { key: "XDG_PUBLICSHARE_DIR", value: "Public" },
         ];
 
         xdgEntries.forEach(({ key, value }) => {

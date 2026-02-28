@@ -1,4 +1,4 @@
-type DirName = "desktop" | "downloads" | "documents" | "music" | "pictures" | "videos";
+type DirName = "desktop" | "downloads" | "documents" | "music" | "pictures" | "videos" | "templates" | "publicshare";
 
 /** Returns the path to the Desktop directory. */
 export function desktop(): string;
@@ -17,6 +17,12 @@ export function pictures(): string;
 
 /** Returns the path to the Videos directory (Movies on macOS). */
 export function videos(): string;
+
+/** Returns the path to the Templates directory. */
+export function templates(): string;
+
+/** Returns the path to the Public Share directory. */
+export function publicshare(): string;
 
 /** Returns the path to the specified user directory. */
 export function getPath(name: DirName): string;
@@ -41,6 +47,8 @@ declare const osUserDirs: typeof downloads & {
     music: typeof music;
     pictures: typeof pictures;
     videos: typeof videos;
+    templates: typeof templates;
+    publicshare: typeof publicshare;
     getPath: typeof getPath;
     getXDGUserDir: typeof getXDGUserDir;
     getXDGDownloadDir: typeof getXDGDownloadDir;

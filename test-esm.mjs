@@ -8,6 +8,8 @@ import osUserDirs, {
     music,
     pictures,
     videos,
+    templates,
+    publicshare,
     getPath,
     getXDGUserDir,
     getXDGDownloadDir,
@@ -43,7 +45,7 @@ test('default export returns Downloads path', () => {
 
 // Named exports
 console.log('\nnamed exports:');
-const namedExports = { downloads, desktop, documents, music, pictures, videos };
+const namedExports = { downloads, desktop, documents, music, pictures, videos, templates, publicshare };
 for (const [name, fn] of Object.entries(namedExports)) {
     test(`${name}() returns absolute path under home`, () => {
         const result = fn();

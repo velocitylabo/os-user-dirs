@@ -9,6 +9,8 @@ const XDG_KEYS = {
     music: "XDG_MUSIC_DIR",
     pictures: "XDG_PICTURES_DIR",
     videos: "XDG_VIDEOS_DIR",
+    templates: "XDG_TEMPLATES_DIR",
+    publicshare: "XDG_PUBLICSHARE_DIR",
 };
 
 const MACOS_DEFAULTS = {
@@ -18,6 +20,8 @@ const MACOS_DEFAULTS = {
     music: "Music",
     pictures: "Pictures",
     videos: "Movies",
+    templates: "Templates",
+    publicshare: "Public",
 };
 
 const DEFAULT_DIRS = {
@@ -27,6 +31,8 @@ const DEFAULT_DIRS = {
     music: "Music",
     pictures: "Pictures",
     videos: "Videos",
+    templates: "Templates",
+    publicshare: "Public",
 };
 
 function getXDGUserDir(key, configPath) {
@@ -74,6 +80,8 @@ function documents() { return resolve("documents"); }
 function music() { return resolve("music"); }
 function pictures() { return resolve("pictures"); }
 function videos() { return resolve("videos"); }
+function templates() { return resolve("templates"); }
+function publicshare() { return resolve("publicshare"); }
 
 // Backward compatibility: require("os-user-dirs")() returns Downloads path
 module.exports = downloads;
@@ -84,6 +92,8 @@ module.exports.documents = documents;
 module.exports.music = music;
 module.exports.pictures = pictures;
 module.exports.videos = videos;
+module.exports.templates = templates;
+module.exports.publicshare = publicshare;
 module.exports.getXDGUserDir = getXDGUserDir;
 
 // Deprecated: kept for backward compatibility
