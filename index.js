@@ -84,10 +84,12 @@ function templates() { return resolve("templates"); }
 function publicshare() { return resolve("publicshare"); }
 
 const BASE_DIR_CONFIG = {
-    config:  { env: "XDG_CONFIG_HOME",  linux: ".config",      darwin: "Library/Application Support", win32: "APPDATA" },
-    data:    { env: "XDG_DATA_HOME",    linux: ".local/share",  darwin: "Library/Application Support", win32: "LOCALAPPDATA" },
-    cache:   { env: "XDG_CACHE_HOME",   linux: ".cache",        darwin: "Library/Caches",              win32: "LOCALAPPDATA" },
-    runtime: { env: "XDG_RUNTIME_DIR",  linux: null,            darwin: null,                          win32: null },
+    config:  { env: "XDG_CONFIG_HOME",  linux: ".config",        darwin: "Library/Application Support", win32: "APPDATA" },
+    data:    { env: "XDG_DATA_HOME",    linux: ".local/share",   darwin: "Library/Application Support", win32: "LOCALAPPDATA" },
+    cache:   { env: "XDG_CACHE_HOME",   linux: ".cache",         darwin: "Library/Caches",              win32: "LOCALAPPDATA" },
+    state:   { env: "XDG_STATE_HOME",   linux: ".local/state",   darwin: "Library/Application Support", win32: "LOCALAPPDATA" },
+    log:     { env: "XDG_STATE_HOME",   linux: ".local/state",   darwin: "Library/Logs",                win32: "LOCALAPPDATA" },
+    runtime: { env: "XDG_RUNTIME_DIR",  linux: null,             darwin: null,                          win32: null },
 };
 
 function resolveBase(name) {
@@ -138,10 +140,72 @@ function resolveBase(name) {
 function configDir() { return resolveBase("config"); }
 function dataDir() { return resolveBase("data"); }
 function cacheDir() { return resolveBase("cache"); }
+function stateDir() { return resolveBase("state"); }
+function logDir() { return resolveBase("log"); }
 function runtimeDir() { return resolveBase("runtime"); }
 
 function getBasePath(name) {
     return resolveBase(name);
+}
+
+const PROJECT_DIR_WIN32_SUB = {
+    config: "Config",
+    data:   "Data",
+    cache:  "Cache",
+    state:  "State",
+    log:    "Log",
+};
+
+function projectDirs(name, options) {
+    if (!name || typeof name !== "string") {
+        throw new Error("projectDirs requires a non-empty string name");
+    }
+
+    const suffix = (options && options.suffix != null) ? options.suffix : "";
+    const appName = name + suffix;
+
+    const homedir = os.homedir();
+    const platform = process.platform;
+
+    function resolveProject(kind) {
+        if (kind === "temp") {
+            if (platform === "win32") {
+                const localAppData = process.env.LOCALAPPDATA || path.join(homedir, "AppData", "Local");
+                return path.join(localAppData, "Temp", appName);
+            }
+            return path.join(os.tmpdir(), appName);
+        }
+
+        if (kind === "runtime") {
+            if (platform === "linux") {
+                const envVal = process.env.XDG_RUNTIME_DIR;
+                if (envVal) {
+                    return path.join(path.resolve(envVal), appName);
+                }
+            }
+            return null;
+        }
+
+        const base = resolveBase(kind);
+        if (!base) { return null; }
+
+        const sub = PROJECT_DIR_WIN32_SUB[kind];
+        if (platform === "win32" && sub) {
+            return path.join(base, appName, sub);
+        }
+
+        return path.join(base, appName);
+    }
+
+    return {
+        config:  resolveProject("config"),
+        data:    resolveProject("data"),
+        cache:   resolveProject("cache"),
+        state:   resolveProject("state"),
+        log:     resolveProject("log"),
+        temp:    resolveProject("temp"),
+        runtime: resolveProject("runtime"),
+    };
 }
 
 // Backward compatibility: require("os-user-dirs")() returns Downloads path
@@ -158,8 +222,11 @@ module.exports.publicshare = publicshare;
 module.exports.configDir = configDir;
 module.exports.dataDir = dataDir;
 module.exports.cacheDir = cacheDir;
+module.exports.stateDir = stateDir;
+module.exports.logDir = logDir;
 module.exports.runtimeDir = runtimeDir;
 module.exports.getBasePath = getBasePath;
+module.exports.projectDirs = projectDirs;
 module.exports.getXDGUserDir = getXDGUserDir;
 
 // Deprecated: kept for backward compatibility
