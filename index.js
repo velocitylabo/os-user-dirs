@@ -148,14 +148,12 @@ function getBasePath(name) {
     return resolveBase(name);
 }
 
-const PROJECT_DIR_CONFIG = {
-    config:  { darwin: "Library/Application Support", win32Sub: "Config" },
-    data:    { darwin: "Library/Application Support", win32Sub: "Data" },
-    cache:   { darwin: "Library/Caches",              win32Sub: "Cache" },
-    state:   { darwin: "Library/Application Support", win32Sub: "State" },
-    log:     { darwin: "Library/Logs",                win32Sub: "Log" },
-    temp:    {},
-    runtime: {},
+const PROJECT_DIR_WIN32_SUB = {
+    config: "Config",
+    data:   "Data",
+    cache:  "Cache",
+    state:  "State",
+    log:    "Log",
 };
 
 function projectDirs(name, options) {
@@ -163,16 +161,16 @@ function projectDirs(name, options) {
         throw new Error("projectDirs requires a non-empty string name");
     }
 
-    var suffix = (options && options.suffix != null) ? options.suffix : "";
-    var appName = name + suffix;
+    const suffix = (options && options.suffix != null) ? options.suffix : "";
+    const appName = name + suffix;
 
-    var homedir = os.homedir();
-    var platform = process.platform;
+    const homedir = os.homedir();
+    const platform = process.platform;
 
     function resolveProject(kind) {
         if (kind === "temp") {
             if (platform === "win32") {
-                var localAppData = process.env.LOCALAPPDATA || path.join(homedir, "AppData", "Local");
+                const localAppData = process.env.LOCALAPPDATA || path.join(homedir, "AppData", "Local");
                 return path.join(localAppData, "Temp", appName);
             }
             return path.join(os.tmpdir(), appName);
@@ -180,7 +178,7 @@ function projectDirs(name, options) {
 
         if (kind === "runtime") {
             if (platform === "linux") {
-                var envVal = process.env.XDG_RUNTIME_DIR;
+                const envVal = process.env.XDG_RUNTIME_DIR;
                 if (envVal) {
                     return path.join(path.resolve(envVal), appName);
                 }
@@ -188,16 +186,12 @@ function projectDirs(name, options) {
             return null;
         }
 
-        var baseCfg = BASE_DIR_CONFIG[kind];
-        if (!baseCfg) { return null; }
-
-        var base = resolveBase(kind);
+        const base = resolveBase(kind);
         if (!base) { return null; }
 
-        if (platform === "win32") {
-            var projCfg = PROJECT_DIR_CONFIG[kind];
-            var sub = projCfg && projCfg.win32Sub;
-            return sub ? path.join(base, appName, sub) : path.join(base, appName);
+        const sub = PROJECT_DIR_WIN32_SUB[kind];
+        if (platform === "win32" && sub) {
+            return path.join(base, appName, sub);
         }
 
         return path.join(base, appName);
