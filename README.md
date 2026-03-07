@@ -66,6 +66,22 @@ getBasePath("config");
 //=> '/home/user/.config'
 ```
 
+#### System search directories
+
+```javascript
+import { configDirs, dataDirs } from "os-user-dirs";
+
+configDirs();
+//=> ['/etc/xdg'] (Linux)
+//=> ['/Library/Application Support', '/Library/Preferences'] (macOS)
+//=> ['C:\\ProgramData'] (Windows)
+
+dataDirs();
+//=> ['/usr/local/share', '/usr/share'] (Linux)
+//=> ['/Library/Application Support'] (macOS)
+//=> ['C:\\ProgramData'] (Windows)
+```
+
 #### Project directories
 
 ```javascript
@@ -171,6 +187,14 @@ Returns the path to the runtime directory (`$XDG_RUNTIME_DIR` on Linux), or `nul
 
 #### `getBasePath(name)`
 Returns the path to the specified base directory. Valid names: `config`, `data`, `cache`, `state`, `log`, `runtime`.
+
+### System Search Directories
+
+#### `configDirs()`
+Returns the system config directory search path list (`string[]`). On Linux, reads `$XDG_CONFIG_DIRS` (default: `["/etc/xdg"]`). On macOS: `["/Library/Application Support", "/Library/Preferences"]`. On Windows: `[%PROGRAMDATA%]`.
+
+#### `dataDirs()`
+Returns the system data directory search path list (`string[]`). On Linux, reads `$XDG_DATA_DIRS` (default: `["/usr/local/share", "/usr/share"]`). On macOS: `["/Library/Application Support"]`. On Windows: `[%PROGRAMDATA%]`.
 
 ### Project Directories
 

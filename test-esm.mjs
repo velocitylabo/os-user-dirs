@@ -18,6 +18,8 @@ import osUserDirs, {
     logDir,
     runtimeDir,
     getBasePath,
+    configDirs,
+    dataDirs,
     projectDirs,
     getXDGUserDir,
     getXDGDownloadDir,
@@ -103,6 +105,29 @@ test('getBasePath("log") === logDir()', () => {
 });
 test('getBasePath("runtime") === runtimeDir()', () => {
     assert.equal(getBasePath('runtime'), runtimeDir());
+});
+
+// configDirs / dataDirs
+console.log('\nsearch directory exports:');
+test('configDirs() returns an array', () => {
+    const result = configDirs();
+    assert.ok(Array.isArray(result), 'configDirs() should return an array');
+    assert.ok(result.length > 0, 'configDirs() should return non-empty array');
+});
+test('configDirs() entries are absolute paths', () => {
+    configDirs().forEach((dir) => {
+        assert.ok(path.isAbsolute(dir), `expected absolute path: ${dir}`);
+    });
+});
+test('dataDirs() returns an array', () => {
+    const result = dataDirs();
+    assert.ok(Array.isArray(result), 'dataDirs() should return an array');
+    assert.ok(result.length > 0, 'dataDirs() should return non-empty array');
+});
+test('dataDirs() entries are absolute paths', () => {
+    dataDirs().forEach((dir) => {
+        assert.ok(path.isAbsolute(dir), `expected absolute path: ${dir}`);
+    });
 });
 
 // projectDirs

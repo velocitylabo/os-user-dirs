@@ -21,6 +21,8 @@ const {
     logDir,
     runtimeDir,
     getBasePath,
+    configDirs,
+    dataDirs,
     projectDirs,
 } = require("./");
 
@@ -314,6 +316,118 @@ describe("os-user-dirs", () => {
                 assert.throws(() => getBasePath("unknown"), /Unknown base directory/);
             });
         });
+    });
+
+    describe("configDirs", () => {
+        const envKeys = ["XDG_CONFIG_DIRS"];
+        const savedEnv = {};
+
+        beforeEach(() => {
+            envKeys.forEach((key) => {
+                savedEnv[key] = process.env[key];
+            });
+        });
+
+        afterEach(() => {
+            envKeys.forEach((key) => {
+                if (savedEnv[key] === undefined) {
+                    delete process.env[key];
+                } else {
+                    process.env[key] = savedEnv[key];
+                }
+            });
+        });
+
+        it("returns an array", () => {
+            assert.ok(Array.isArray(configDirs()));
+        });
+
+        it("returns non-empty array", () => {
+            assert.ok(configDirs().length > 0);
+        });
+
+        it("all entries are absolute paths", () => {
+            configDirs().forEach((dir) => {
+                assert.ok(path.isAbsolute(dir), `expected absolute path: ${dir}`);
+            });
+        });
+
+        if (process.platform === "linux") {
+            it("respects XDG_CONFIG_DIRS", () => {
+                process.env.XDG_CONFIG_DIRS = "/tmp/conf1:/tmp/conf2";
+                const result = configDirs();
+                assert.deepStrictEqual(result, ["/tmp/conf1", "/tmp/conf2"]);
+            });
+
+            it("defaults to ['/etc/xdg'] when env is unset", () => {
+                delete process.env.XDG_CONFIG_DIRS;
+                assert.deepStrictEqual(configDirs(), ["/etc/xdg"]);
+            });
+
+            it("ignores empty XDG_CONFIG_DIRS", () => {
+                process.env.XDG_CONFIG_DIRS = "";
+                assert.deepStrictEqual(configDirs(), ["/etc/xdg"]);
+            });
+
+            it("filters empty segments from XDG_CONFIG_DIRS", () => {
+                process.env.XDG_CONFIG_DIRS = "/tmp/conf1::/tmp/conf2:";
+                const result = configDirs();
+                assert.deepStrictEqual(result, ["/tmp/conf1", "/tmp/conf2"]);
+            });
+        }
+    });
+
+    describe("dataDirs", () => {
+        const envKeys = ["XDG_DATA_DIRS"];
+        const savedEnv = {};
+
+        beforeEach(() => {
+            envKeys.forEach((key) => {
+                savedEnv[key] = process.env[key];
+            });
+        });
+
+        afterEach(() => {
+            envKeys.forEach((key) => {
+                if (savedEnv[key] === undefined) {
+                    delete process.env[key];
+                } else {
+                    process.env[key] = savedEnv[key];
+                }
+            });
+        });
+
+        it("returns an array", () => {
+            assert.ok(Array.isArray(dataDirs()));
+        });
+
+        it("returns non-empty array", () => {
+            assert.ok(dataDirs().length > 0);
+        });
+
+        it("all entries are absolute paths", () => {
+            dataDirs().forEach((dir) => {
+                assert.ok(path.isAbsolute(dir), `expected absolute path: ${dir}`);
+            });
+        });
+
+        if (process.platform === "linux") {
+            it("respects XDG_DATA_DIRS", () => {
+                process.env.XDG_DATA_DIRS = "/tmp/data1:/tmp/data2";
+                const result = dataDirs();
+                assert.deepStrictEqual(result, ["/tmp/data1", "/tmp/data2"]);
+            });
+
+            it("defaults to ['/usr/local/share', '/usr/share'] when env is unset", () => {
+                delete process.env.XDG_DATA_DIRS;
+                assert.deepStrictEqual(dataDirs(), ["/usr/local/share", "/usr/share"]);
+            });
+
+            it("ignores empty XDG_DATA_DIRS", () => {
+                process.env.XDG_DATA_DIRS = "";
+                assert.deepStrictEqual(dataDirs(), ["/usr/local/share", "/usr/share"]);
+            });
+        }
     });
 
     describe("projectDirs", () => {

@@ -47,6 +47,22 @@ export function logDir(): string;
 /** Returns the path to the XDG runtime directory, or null if unavailable. */
 export function runtimeDir(): string | null;
 
+/**
+ * Returns the system config directory search path list.
+ * On Linux, reads `$XDG_CONFIG_DIRS` (default: `["/etc/xdg"]`).
+ * On macOS: `["/Library/Application Support", "/Library/Preferences"]`.
+ * On Windows: `[%PROGRAMDATA%]`.
+ */
+export function configDirs(): string[];
+
+/**
+ * Returns the system data directory search path list.
+ * On Linux, reads `$XDG_DATA_DIRS` (default: `["/usr/local/share", "/usr/share"]`).
+ * On macOS: `["/Library/Application Support"]`.
+ * On Windows: `[%PROGRAMDATA%]`.
+ */
+export function dataDirs(): string[];
+
 /** Returns the path to the specified base directory. */
 export function getBasePath(name: "config"): string;
 export function getBasePath(name: "data"): string;
@@ -108,6 +124,8 @@ declare const osUserDirs: typeof downloads & {
     logDir: typeof logDir;
     runtimeDir: typeof runtimeDir;
     getBasePath: typeof getBasePath;
+    configDirs: typeof configDirs;
+    dataDirs: typeof dataDirs;
     projectDirs: typeof projectDirs;
     getXDGUserDir: typeof getXDGUserDir;
     getXDGDownloadDir: typeof getXDGDownloadDir;

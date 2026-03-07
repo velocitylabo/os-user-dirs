@@ -144,6 +144,59 @@ function stateDir() { return resolveBase("state"); }
 function logDir() { return resolveBase("log"); }
 function runtimeDir() { return resolveBase("runtime"); }
 
+const SEARCH_DIRS_CONFIG = {
+    config: {
+        env: "XDG_CONFIG_DIRS",
+        linux: ["/etc/xdg"],
+        darwin: ["/Library/Application Support", "/Library/Preferences"],
+        win32: "PROGRAMDATA",
+    },
+    data: {
+        env: "XDG_DATA_DIRS",
+        linux: ["/usr/local/share", "/usr/share"],
+        darwin: ["/Library/Application Support"],
+        win32: "PROGRAMDATA",
+    },
+};
+
+function resolveSearchDirs(name) {
+    const cfg = SEARCH_DIRS_CONFIG[name];
+    if (!cfg) {
+        throw new Error("Unknown search directory: " + name + ". Valid names: " + Object.keys(SEARCH_DIRS_CONFIG).join(", "));
+    }
+
+    const platform = process.platform;
+
+    if (platform === "linux") {
+        const envVal = process.env[cfg.env];
+        if (envVal) {
+            const dirs = envVal.split(":").filter(Boolean);
+            if (dirs.length > 0) {
+                return dirs.map(function (d) { return path.resolve(d); });
+            }
+        }
+        return cfg.linux.slice();
+    }
+
+    if (platform === "darwin") {
+        return cfg.darwin.slice();
+    }
+
+    if (platform === "win32") {
+        const winVal = process.env[cfg.win32];
+        if (winVal) {
+            return [path.resolve(winVal)];
+        }
+        return [path.join(process.env.SYSTEMDRIVE || "C:", "ProgramData")];
+    }
+
+    // Unknown platform: use Linux defaults
+    return cfg.linux.slice();
+}
+
+function configDirs() { return resolveSearchDirs("config"); }
+function dataDirs() { return resolveSearchDirs("data"); }
+
 function getBasePath(name) {
     return resolveBase(name);
 }
@@ -226,6 +279,8 @@ module.exports.stateDir = stateDir;
 module.exports.logDir = logDir;
 module.exports.runtimeDir = runtimeDir;
 module.exports.getBasePath = getBasePath;
+module.exports.configDirs = configDirs;
+module.exports.dataDirs = dataDirs;
 module.exports.projectDirs = projectDirs;
 module.exports.getXDGUserDir = getXDGUserDir;
 
