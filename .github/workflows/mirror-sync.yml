@@ -16,6 +16,7 @@ jobs:
         with:
           ref: ${{ github.event.inputs.ref }}
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Push to mirror
         env:
