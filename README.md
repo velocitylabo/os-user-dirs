@@ -168,6 +168,12 @@ Returns the path to the specified user directory. Valid names: `desktop`, `downl
 ### `binDir()`
 Returns the path to the user local bin directory (`~/.local/bin` on Linux/macOS), or `null` on Windows.
 
+### `applicationsDir()`
+Returns the path to the user applications directory.
+- Linux: `$XDG_DATA_HOME/applications` (default `~/.local/share/applications`)
+- macOS: `~/Applications`
+- Windows: `%APPDATA%\Microsoft\Windows\Start Menu\Programs`
+
 ### Base Directories
 
 #### `configDir()`

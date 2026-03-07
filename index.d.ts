@@ -101,6 +101,14 @@ interface ProjectDirsResult {
 export function projectDirs(name: string, options?: ProjectDirsOptions): ProjectDirsResult;
 
 /**
+ * Returns the path to the user applications directory.
+ * Linux: `$XDG_DATA_HOME/applications` (default `~/.local/share/applications`)
+ * macOS: `~/Applications`
+ * Windows: `%APPDATA%/Microsoft/Windows/Start Menu/Programs`
+ */
+export function applicationsDir(): string;
+
+/**
  * Reads an XDG user-dirs.dirs config and returns the directory for the given key.
  * @param key - XDG key (e.g. "XDG_DOWNLOAD_DIR")
  * @param configPath - Optional path to user-dirs.dirs config file
@@ -135,6 +143,7 @@ declare const osUserDirs: typeof downloads & {
     configDirs: typeof configDirs;
     dataDirs: typeof dataDirs;
     projectDirs: typeof projectDirs;
+    applicationsDir: typeof applicationsDir;
     getXDGUserDir: typeof getXDGUserDir;
     getXDGDownloadDir: typeof getXDGDownloadDir;
 };

@@ -293,6 +293,29 @@ function projectDirs(name, options) {
     };
 }
 
+function applicationsDir() {
+    var homedir = os.homedir();
+    var platform = process.platform;
+
+    if (platform === "linux") {
+        var envVal = process.env.XDG_DATA_HOME;
+        var base = envVal ? path.resolve(envVal) : path.join(homedir, ".local", "share");
+        return path.join(base, "applications");
+    }
+
+    if (platform === "darwin") {
+        return path.join(homedir, "Applications");
+    }
+
+    if (platform === "win32") {
+        var appdata = process.env.APPDATA || path.join(homedir, "AppData", "Roaming");
+        return path.join(appdata, "Microsoft", "Windows", "Start Menu", "Programs");
+    }
+
+    // Unknown platform: use XDG-style default
+    return path.join(homedir, ".local", "share", "applications");
+}
+
 // Backward compatibility: require("os-user-dirs")() returns Downloads path
 module.exports = downloads;
 module.exports.getPath = getPath;
@@ -316,6 +339,7 @@ module.exports.getBasePath = getBasePath;
 module.exports.configDirs = configDirs;
 module.exports.dataDirs = dataDirs;
 module.exports.projectDirs = projectDirs;
+module.exports.applicationsDir = applicationsDir;
 module.exports.getXDGUserDir = getXDGUserDir;
 
 // Deprecated: kept for backward compatibility

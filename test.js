@@ -26,6 +26,7 @@ const {
     dataDirs,
     projectDirs,
     fontsDir,
+    applicationsDir,
 } = require("./");
 
 describe("os-user-dirs", () => {
@@ -626,6 +627,58 @@ describe("os-user-dirs", () => {
             it("ignores empty XDG_DATA_HOME", () => {
                 process.env.XDG_DATA_HOME = "";
                 assert.strictEqual(fontsDir(), path.join(os.homedir(), ".local", "share", "fonts"));
+            });
+        }
+    });
+
+    describe("applicationsDir", () => {
+        const envKeys = ["XDG_DATA_HOME"];
+        const savedEnv = {};
+
+        beforeEach(() => {
+            envKeys.forEach((key) => {
+                savedEnv[key] = process.env[key];
+            });
+        });
+
+        afterEach(() => {
+            envKeys.forEach((key) => {
+                if (savedEnv[key] === undefined) {
+                    delete process.env[key];
+                } else {
+                    process.env[key] = savedEnv[key];
+                }
+            });
+        });
+
+        it("returns an absolute path", () => {
+            assert.ok(path.isAbsolute(applicationsDir()));
+        });
+
+        it("returns a string", () => {
+            assert.strictEqual(typeof applicationsDir(), "string");
+        });
+
+        if (process.platform === "linux") {
+            it("defaults to ~/.local/share/applications when XDG_DATA_HOME is unset", () => {
+                delete process.env.XDG_DATA_HOME;
+                assert.strictEqual(applicationsDir(), path.join(os.homedir(), ".local", "share", "applications"));
+            });
+
+            it("respects XDG_DATA_HOME", () => {
+                process.env.XDG_DATA_HOME = "/tmp/custom-data";
+                assert.strictEqual(applicationsDir(), "/tmp/custom-data/applications");
+            });
+
+            it("ignores empty XDG_DATA_HOME", () => {
+                process.env.XDG_DATA_HOME = "";
+                assert.strictEqual(applicationsDir(), path.join(os.homedir(), ".local", "share", "applications"));
+            });
+        }
+
+        if (process.platform === "darwin") {
+            it("returns ~/Applications on macOS", () => {
+                assert.strictEqual(applicationsDir(), path.join(os.homedir(), "Applications"));
             });
         }
     });

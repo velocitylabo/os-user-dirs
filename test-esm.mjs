@@ -23,6 +23,7 @@ import osUserDirs, {
     dataDirs,
     projectDirs,
     fontsDir,
+    applicationsDir,
     getXDGUserDir,
     getXDGDownloadDir,
 } from './index.mjs';
@@ -180,6 +181,16 @@ test('fontsDir() returns absolute path', () => {
 test('fontsDir() path ends with fonts or Fonts', () => {
     const result = fontsDir();
     assert.ok(path.basename(result).match(/fonts/i), 'should end with fonts');
+});
+
+// applicationsDir
+console.log('\napplicationsDir:');
+test('applicationsDir() returns absolute path', () => {
+    const result = applicationsDir();
+    assert.ok(path.isAbsolute(result), 'applicationsDir() should be absolute');
+});
+test('applicationsDir() returns a string', () => {
+    assert.equal(typeof applicationsDir(), 'string');
 });
 
 // Utility exports exist
