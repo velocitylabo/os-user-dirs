@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.0](https://github.com/velocitylabo/os-user-dirs/compare/v2.4.0...v2.5.0) (2026-03-07)
+
+
+### Features
+
+* add configDirs() and dataDirs() for XDG system search paths  ([#2](https://github.com/velocitylabo/os-user-dirs/issues/2)) ([53a03f4](https://github.com/velocitylabo/os-user-dirs/commit/53a03f4d635965cb0812e9e8115e94502ea2fac4))
+
 ## [2.4.0](https://github.com/velocitylabo/os-user-dirs/compare/v2.3.0...v2.4.0) (2026-03-04)
 
 
