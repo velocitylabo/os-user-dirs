@@ -65,6 +65,93 @@ CommonJS is also supported:
 const { downloads, configDir, projectDirs } = require("os-user-dirs");
 ```
 
+### TypeScript
+
+Full type definitions are included. `getPath()` accepts a union type for auto-completion:
+
+```typescript
+import { getPath } from "os-user-dirs";
+
+getPath("downloads");  // OK
+getPath("desktop");    // OK
+getPath("templates");  // OK
+getPath("unknown");    // Type error
+```
+
+## API
+
+> For detailed API documentation with platform-specific behavior, environment variables, and edge cases, see the **[API Reference](docs/api.md)**.
+
+### `downloads()`
+Returns the path to the Downloads directory.
+
+### `desktop()`
+Returns the path to the Desktop directory.
+
+### `documents()`
+Returns the path to the Documents directory.
+
+### `music()`
+Returns the path to the Music directory.
+
+### `pictures()`
+Returns the path to the Pictures directory.
+
+### `videos()`
+Returns the path to the Videos directory (Movies on macOS).
+
+### `templates()`
+Returns the path to the Templates directory.
+
+### `publicshare()`
+Returns the path to the Public Share directory.
+
+### `getPath(name)`
+Returns the path to the specified user directory. Valid names: `desktop`, `downloads`, `documents`, `music`, `pictures`, `videos`, `templates`, `publicshare`.
+
+### `homeDir()`
+Returns the path to the user's home directory. Uses `os.homedir()` internally.
+
+### `binDir()`
+Returns the path to the user local bin directory (`~/.local/bin` on Linux/macOS), or `null` on Windows.
+
+### `trashDir()`
+Returns the path to the user trash directory, or `null` on Windows.
+- Linux: `$XDG_DATA_HOME/Trash` (default `~/.local/share/Trash`) — FreeDesktop Trash spec
+- macOS: `~/.Trash`
+- Windows: `null` (Recycle Bin requires Shell API)
+
+### `applicationsDir()`
+Returns the path to the user applications directory.
+- Linux: `$XDG_DATA_HOME/applications` (default `~/.local/share/applications`)
+- macOS: `~/Applications`
+- Windows: `%APPDATA%\Microsoft\Windows\Start Menu\Programs`
+
+### Base Directories
+
+#### `configDir()`
+Returns the path to the config directory (`~/.config` on Linux, `~/Library/Application Support` on macOS, `%APPDATA%` on Windows).
+
+#### `dataDir()`
+Returns the path to the data directory (`~/.local/share` on Linux, `~/Library/Application Support` on macOS, `%LOCALAPPDATA%` on Windows).
+
+#### `cacheDir()`
+Returns the path to the cache directory (`~/.cache` on Linux, `~/Library/Caches` on macOS, `%LOCALAPPDATA%` on Windows).
+
+#### `stateDir()`
+Returns the path to the state directory (`~/.local/state` on Linux, `~/Library/Application Support` on macOS, `%LOCALAPPDATA%` on Windows).
+
+#### `logDir()`
+Returns the path to the log directory (`~/.local/state` on Linux, `~/Library/Logs` on macOS, `%LOCALAPPDATA%` on Windows).
+
+#### `runtimeDir()`
+Returns the path to the runtime directory (`$XDG_RUNTIME_DIR` on Linux), or `null` if unavailable.
+
+#### `fontsDir()`
+Returns the path to the user fonts directory (`~/.local/share/fonts` on Linux, `~/Library/Fonts` on macOS, `%LOCALAPPDATA%/Microsoft/Windows/Fonts` on Windows). On Linux, respects `$XDG_DATA_HOME`.
+
+#### `getBasePath(name)`
+Returns the path to the specified base directory. Valid names: `config`, `data`, `cache`, `state`, `log`, `runtime`.
 ## API Overview
 
 ### User Directories
