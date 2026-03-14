@@ -247,6 +247,12 @@ getBasePath("config");  // OK — type: string
 getBasePath("unknown"); // Type error
 ```
 
+## Integration guides
+
+- **[Electron Guide](docs/guide-electron.md)** — Using os-user-dirs in Electron apps: `app.getPath()` mapping, main/renderer process patterns, vendor-scoped directories
+- **[CLI Tools Guide](docs/guide-cli-tools.md)** — Using `projectDirs()` with commander, yargs, and oclif for config, cache, and log management
+
+## Migration from xdg-basedir
 ## Migration Guides
 
 Switching from another library? We have you covered:
