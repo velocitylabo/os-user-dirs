@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.0.0](https://github.com/velocitylabo/os-user-dirs/compare/v2.7.0...v3.0.0) (2026-03-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove deprecated getXDGDownloadDir() ([#19](https://github.com/velocitylabo/os-user-dirs/issues/19))
+* raise minimum Node.js version to 18+ ([#21](https://github.com/velocitylabo/os-user-dirs/issues/21))
+
+### Features
+
+* add ensureDir() helper function ([#18](https://github.com/velocitylabo/os-user-dirs/issues/18)) ([45e0fde](https://github.com/velocitylabo/os-user-dirs/commit/45e0fded6778383107b8972dd8224065c26b7ad8))
+* add homeDir() function ([#17](https://github.com/velocitylabo/os-user-dirs/issues/17)) ([d0e0d38](https://github.com/velocitylabo/os-user-dirs/commit/d0e0d380a39590ecc16a3ea2321d4ece315e0192))
+* add trashDir() function ([#23](https://github.com/velocitylabo/os-user-dirs/issues/23)) ([85fb7b7](https://github.com/velocitylabo/os-user-dirs/commit/85fb7b7b39119f97863e2f9b1e39c1bf97205fcd))
+* raise minimum Node.js version to 18+ ([#21](https://github.com/velocitylabo/os-user-dirs/issues/21)) ([d06be42](https://github.com/velocitylabo/os-user-dirs/commit/d06be42d68b5f1be4579fcaecc44647f33baf26e))
+* remove deprecated getXDGDownloadDir() ([#19](https://github.com/velocitylabo/os-user-dirs/issues/19)) ([165a8d9](https://github.com/velocitylabo/os-user-dirs/commit/165a8d963249e1ceab57c549ceaeff3204ece07b))
+
 ## [2.7.0](https://github.com/velocitylabo/os-user-dirs/compare/v2.6.0...v2.7.0) (2026-03-07)
 
 
