@@ -152,11 +152,11 @@ function logDir() { return resolveBase("log"); }
 function runtimeDir() { return resolveBase("runtime"); }
 
 function fontsDir() {
-    var platform = process.platform;
-    var homedir = os.homedir();
+    const platform = process.platform;
+    const homedir = os.homedir();
 
     if (platform === "linux") {
-        var envVal = process.env.XDG_DATA_HOME;
+        const envVal = process.env.XDG_DATA_HOME;
         if (envVal) {
             return path.join(path.resolve(envVal), "fonts");
         }
@@ -168,7 +168,7 @@ function fontsDir() {
     }
 
     if (platform === "win32") {
-        var localAppData = process.env.LOCALAPPDATA || path.join(homedir, "AppData", "Local");
+        const localAppData = process.env.LOCALAPPDATA || path.join(homedir, "AppData", "Local");
         return path.join(localAppData, "Microsoft", "Windows", "Fonts");
     }
 
@@ -262,7 +262,7 @@ function projectDirs(name, options) {
     const vendorDir = vendor ? normalizeVendor(vendor, platform) : "";
 
     function joinWithVendor() {
-        var segments = Array.prototype.slice.call(arguments);
+        const segments = Array.prototype.slice.call(arguments);
         if (vendorDir) {
             segments.splice(1, 0, vendorDir);
         }
@@ -315,21 +315,21 @@ function projectUserDirs(name) {
         throw new Error("projectUserDirs requires a non-empty string name");
     }
 
-    var result = {};
-    var keys = Object.keys(XDG_KEYS);
-    for (var i = 0; i < keys.length; i++) {
+    const result = {};
+    const keys = Object.keys(XDG_KEYS);
+    for (let i = 0; i < keys.length; i++) {
         result[keys[i]] = path.join(resolve(keys[i]), name);
     }
     return result;
 }
 
 function trashDir() {
-    var platform = process.platform;
-    var homedir = os.homedir();
+    const platform = process.platform;
+    const homedir = os.homedir();
 
     if (platform === "linux") {
-        var envVal = process.env.XDG_DATA_HOME;
-        var base = envVal ? path.resolve(envVal) : path.join(homedir, ".local", "share");
+        const envVal = process.env.XDG_DATA_HOME;
+        const base = envVal ? path.resolve(envVal) : path.join(homedir, ".local", "share");
         return path.join(base, "Trash");
     }
 
@@ -342,18 +342,18 @@ function trashDir() {
     }
 
     // Unknown platform: use XDG-style default
-    var envVal = process.env.XDG_DATA_HOME;
-    var base = envVal ? path.resolve(envVal) : path.join(homedir, ".local", "share");
+    const envVal = process.env.XDG_DATA_HOME;
+    const base = envVal ? path.resolve(envVal) : path.join(homedir, ".local", "share");
     return path.join(base, "Trash");
 }
 
 function applicationsDir() {
-    var homedir = os.homedir();
-    var platform = process.platform;
+    const homedir = os.homedir();
+    const platform = process.platform;
 
     if (platform === "linux") {
-        var envVal = process.env.XDG_DATA_HOME;
-        var base = envVal ? path.resolve(envVal) : path.join(homedir, ".local", "share");
+        const envVal = process.env.XDG_DATA_HOME;
+        const base = envVal ? path.resolve(envVal) : path.join(homedir, ".local", "share");
         return path.join(base, "applications");
     }
 
@@ -362,7 +362,7 @@ function applicationsDir() {
     }
 
     if (platform === "win32") {
-        var appdata = process.env.APPDATA || path.join(homedir, "AppData", "Roaming");
+        const appdata = process.env.APPDATA || path.join(homedir, "AppData", "Roaming");
         return path.join(appdata, "Microsoft", "Windows", "Start Menu", "Programs");
     }
 
