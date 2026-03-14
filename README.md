@@ -287,6 +287,10 @@ ensureDirSync(dirs.config);
 await ensureDir(dirs.data);
 ```
 
+## Migration from xdg-basedir
+
+Switching from [xdg-basedir](https://github.com/sindresorhus/xdg-basedir)? See the **[Migration Guide](docs/migration-from-xdg-basedir.md)** for API mapping, code examples (v4 CJS and v5 ESM), and cross-platform benefits.
+
 ## Migration from env-paths
 
 Switching from [env-paths](https://github.com/sindresorhus/env-paths)? See the **[Migration Guide](docs/migration-from-env-paths.md)** for API mapping, code examples, and a summary of additional features.
