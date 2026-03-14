@@ -68,7 +68,7 @@
     "url": "https://github.com/velocitylabo/os-user-dirs/issues"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "homepage": "https://github.com/velocitylabo/os-user-dirs#readme",
   "c8": {
