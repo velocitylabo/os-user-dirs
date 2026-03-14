@@ -1,18 +1,31 @@
-# os-user-dirs [![CI](https://github.com/velocitylabo/os-user-dirs/actions/workflows/ci.yml/badge.svg)](https://github.com/velocitylabo/os-user-dirs/actions/workflows/ci.yml)
+# os-user-dirs
 
-Get OS-specific user directories (Downloads, Desktop, Documents, etc.) and XDG base directories (config, data, cache, state, log, runtime) with zero dependencies. Also provides `projectDirs()` for app-scoped directories (similar to `env-paths`).
+[![npm version](https://img.shields.io/npm/v/os-user-dirs.svg)](https://www.npmjs.com/package/os-user-dirs)
+[![npm downloads](https://img.shields.io/npm/dw/os-user-dirs.svg)](https://www.npmjs.com/package/os-user-dirs)
+[![CI](https://github.com/velocitylabo/os-user-dirs/actions/workflows/ci.yml/badge.svg)](https://github.com/velocitylabo/os-user-dirs/actions/workflows/ci.yml)
+[![Node.js](https://img.shields.io/node/v/os-user-dirs.svg)](https://nodejs.org)
+[![license](https://img.shields.io/npm/l/os-user-dirs.svg)](https://github.com/velocitylabo/os-user-dirs/blob/master/LICENSE)
+
+> All-in-one OS directory paths — user directories, XDG base directories, and app-scoped project directories — with zero dependencies.
+
+Replaces [`env-paths`](https://github.com/sindresorhus/env-paths), [`xdg-basedir`](https://github.com/sindresorhus/xdg-basedir), and [`platform-folders`](https://github.com/nicbarker/platform-folders) in a single package. CJS + ESM dual support, TypeScript included.
 
 > **Note:** This package was previously published as [`os-downloads`](https://www.npmjs.com/package/os-downloads). The old package is deprecated — please use `os-user-dirs` instead.
 
-## Requirements
+## Why os-user-dirs?
 
-- Node.js 18 or later
-
-## Supported platforms
-
-- Windows
-- macOS
-- Linux (with XDG user-dirs.dirs support)
+| Feature | os-user-dirs | env-paths | xdg-basedir | platform-folders |
+|---|:---:|:---:|:---:|:---:|
+| Weekly downloads | Growing | ~30M | ~7M | ~642 |
+| Last updated | **Active** | 4 years ago | 4 years ago | Low activity |
+| Dependencies | **0** | 0 | 0 | C++ native |
+| Platforms | **All** | All | Linux only | All |
+| User directories (8) | **Yes** | - | - | Partial |
+| XDG base directories (6) | **Yes** | Partial | **Yes** | Partial |
+| XDG search paths | **Yes** | - | **Yes** | - |
+| Project directories | **Yes** | **Yes** | - | - |
+| CJS + ESM | **Both** | ESM only (v3) | ESM only (v5) | CJS |
+| TypeScript | **Included** | Included | Included | - |
 
 ## Install
 
@@ -20,280 +33,144 @@ Get OS-specific user directories (Downloads, Desktop, Documents, etc.) and XDG b
 $ npm install os-user-dirs
 ```
 
-## Usage
+Requires Node.js 18 or later. Works on Windows, macOS, and Linux.
 
-### ESM (recommended)
+## Quick Start
 
 ```javascript
-import { downloads, desktop, documents, music, pictures, videos, templates, publicshare, getPath, homeDir } from "os-user-dirs";
+import { downloads, configDir, projectDirs, ensureDir } from "os-user-dirs";
 
-homeDir();
-//=> '/home/user'
-
+// User directories
 downloads();
 //=> '/home/user/Downloads'
 
-desktop();
-//=> '/home/user/Desktop'
-
-templates();
-//=> '/home/user/Templates'
-
-publicshare();
-//=> '/home/user/Public'
-
-getPath("music");
-//=> '/home/user/Music'
-```
-
-#### Base directories
-
-```javascript
-import { configDir, dataDir, cacheDir, stateDir, logDir, runtimeDir, getBasePath } from "os-user-dirs";
-
+// XDG base directories
 configDir();
 //=> '/home/user/.config'
 
-dataDir();
-//=> '/home/user/.local/share'
-
-cacheDir();
-//=> '/home/user/.cache'
-
-stateDir();
-//=> '/home/user/.local/state'
-
-logDir();
-//=> '/home/user/.local/state' (Linux), '~/Library/Logs' (macOS)
-
-runtimeDir();
-//=> '/run/user/1000' (or null)
-
-getBasePath("config");
-//=> '/home/user/.config'
-```
-
-#### System search directories
-
-```javascript
-import { configDirs, dataDirs } from "os-user-dirs";
-
-configDirs();
-//=> ['/etc/xdg'] (Linux)
-//=> ['/Library/Application Support', '/Library/Preferences'] (macOS)
-//=> ['C:\\ProgramData'] (Windows)
-
-dataDirs();
-//=> ['/usr/local/share', '/usr/share'] (Linux)
-//=> ['/Library/Application Support'] (macOS)
-//=> ['C:\\ProgramData'] (Windows)
-```
-
-#### Project directories
-
-```javascript
-import { projectDirs } from "os-user-dirs";
-
+// App-scoped project directories (env-paths alternative)
 const dirs = projectDirs("my-app");
 dirs.config  //=> '/home/user/.config/my-app'
 dirs.data    //=> '/home/user/.local/share/my-app'
 dirs.cache   //=> '/home/user/.cache/my-app'
-dirs.state   //=> '/home/user/.local/state/my-app'
-dirs.log     //=> '/home/user/.local/state/my-app'
-dirs.temp    //=> '/tmp/my-app'
-dirs.runtime //=> '/run/user/1000/my-app' (or null)
 
-// With suffix option
-const dirs2 = projectDirs("my-app", { suffix: "-nodejs" });
-dirs2.config //=> '/home/user/.config/my-app-nodejs'
-
-// With vendor option
-const dirs3 = projectDirs("my-app", { vendor: "My Org" });
-dirs3.config //=> '/home/user/.config/my-org/my-app' (Linux)
-dirs3.config //=> '~/Library/Application Support/My Org/my-app' (macOS)
+// Ensure directory exists before use
+await ensureDir(dirs.config);
 ```
 
-#### Project user directories
+CommonJS is also supported:
+
+```javascript
+const { downloads, configDir, projectDirs } = require("os-user-dirs");
+```
+
+## API Overview
+
+### User Directories
+
+| Function | Description |
+|---|---|
+| `downloads()` | Downloads directory |
+| `desktop()` | Desktop directory |
+| `documents()` | Documents directory |
+| `music()` | Music directory |
+| `pictures()` | Pictures directory |
+| `videos()` | Videos directory (Movies on macOS) |
+| `templates()` | Templates directory |
+| `publicshare()` | Public Share directory |
+| `homeDir()` | Home directory |
+| `getPath(name)` | Get user directory by name |
+
+### Base Directories (XDG)
+
+| Function | Linux | macOS | Windows |
+|---|---|---|---|
+| `configDir()` | `~/.config` | `~/Library/Application Support` | `%APPDATA%` |
+| `dataDir()` | `~/.local/share` | `~/Library/Application Support` | `%LOCALAPPDATA%` |
+| `cacheDir()` | `~/.cache` | `~/Library/Caches` | `%LOCALAPPDATA%` |
+| `stateDir()` | `~/.local/state` | `~/Library/Application Support` | `%LOCALAPPDATA%` |
+| `logDir()` | `~/.local/state` | `~/Library/Logs` | `%LOCALAPPDATA%` |
+| `runtimeDir()` | `$XDG_RUNTIME_DIR` | `null` | `null` |
+| `getBasePath(name)` | Get base directory by name | | |
+
+### System Search Directories
+
+| Function | Linux | macOS | Windows |
+|---|---|---|---|
+| `configDirs()` | `$XDG_CONFIG_DIRS` | `["/Library/Application Support", "/Library/Preferences"]` | `[%PROGRAMDATA%]` |
+| `dataDirs()` | `$XDG_DATA_DIRS` | `["/Library/Application Support"]` | `[%PROGRAMDATA%]` |
+
+### Additional Directories
+
+| Function | Linux | macOS | Windows |
+|---|---|---|---|
+| `fontsDir()` | `~/.local/share/fonts` | `~/Library/Fonts` | `%LOCALAPPDATA%/Microsoft/Windows/Fonts` |
+| `binDir()` | `~/.local/bin` | `~/.local/bin` | `null` |
+| `applicationsDir()` | `~/.local/share/applications` | `~/Applications` | Start Menu |
+| `trashDir()` | `~/.local/share/Trash` | `~/.Trash` | `null` |
+
+### Project Directories
+
+```javascript
+import { projectDirs } from "os-user-dirs";
+
+// Basic usage
+const dirs = projectDirs("my-app");
+// => { config, data, cache, state, log, temp, runtime }
+
+// With vendor (organization) prefix
+const dirs2 = projectDirs("my-app", { vendor: "My Org" });
+dirs2.config //=> '~/.config/my-org/my-app' (Linux)
+
+// With suffix
+const dirs3 = projectDirs("my-app", { suffix: "-nodejs" });
+dirs3.config //=> '~/.config/my-app-nodejs'
+```
+
+### Project User Directories
 
 ```javascript
 import { projectUserDirs } from "os-user-dirs";
 
 const dirs = projectUserDirs("my-app");
-dirs.desktop     //=> '/home/user/Desktop/my-app'
-dirs.downloads   //=> '/home/user/Downloads/my-app'
-dirs.documents   //=> '/home/user/Documents/my-app'
-dirs.music       //=> '/home/user/Music/my-app'
-dirs.pictures    //=> '/home/user/Pictures/my-app'
-dirs.videos      //=> '/home/user/Videos/my-app'
-dirs.templates   //=> '/home/user/Templates/my-app'
-dirs.publicshare //=> '/home/user/Public/my-app'
+// => { desktop, downloads, documents, music, pictures, videos, templates, publicshare }
+dirs.downloads //=> '/home/user/Downloads/my-app'
 ```
-
-### CommonJS
-
-```javascript
-const { downloads, desktop, documents, music, pictures, videos, templates, publicshare, getPath } = require("os-user-dirs");
-
-downloads();
-//=> '/home/user/Downloads'
-```
-
-### Default export (backward compatibility)
-
-```javascript
-// ESM
-import downloads from "os-user-dirs";
-
-// CommonJS
-const downloads = require("os-user-dirs");
-
-downloads();
-//=> '/home/user/Downloads'
-```
-
-### TypeScript
-
-Full type definitions are included. `getPath()` accepts a union type for auto-completion:
-
-```typescript
-import { getPath } from "os-user-dirs";
-
-getPath("downloads");  // OK
-getPath("desktop");    // OK
-getPath("templates");  // OK
-getPath("unknown");    // Type error
-```
-
-## API
-
-### `downloads()`
-Returns the path to the Downloads directory.
-
-### `desktop()`
-Returns the path to the Desktop directory.
-
-### `documents()`
-Returns the path to the Documents directory.
-
-### `music()`
-Returns the path to the Music directory.
-
-### `pictures()`
-Returns the path to the Pictures directory.
-
-### `videos()`
-Returns the path to the Videos directory (Movies on macOS).
-
-### `templates()`
-Returns the path to the Templates directory.
-
-### `publicshare()`
-Returns the path to the Public Share directory.
-
-### `getPath(name)`
-Returns the path to the specified user directory. Valid names: `desktop`, `downloads`, `documents`, `music`, `pictures`, `videos`, `templates`, `publicshare`.
-
-### `homeDir()`
-Returns the path to the user's home directory. Uses `os.homedir()` internally.
-
-### `binDir()`
-Returns the path to the user local bin directory (`~/.local/bin` on Linux/macOS), or `null` on Windows.
-
-### `trashDir()`
-Returns the path to the user trash directory, or `null` on Windows.
-- Linux: `$XDG_DATA_HOME/Trash` (default `~/.local/share/Trash`) — FreeDesktop Trash spec
-- macOS: `~/.Trash`
-- Windows: `null` (Recycle Bin requires Shell API)
-
-### `applicationsDir()`
-Returns the path to the user applications directory.
-- Linux: `$XDG_DATA_HOME/applications` (default `~/.local/share/applications`)
-- macOS: `~/Applications`
-- Windows: `%APPDATA%\Microsoft\Windows\Start Menu\Programs`
-
-### Base Directories
-
-#### `configDir()`
-Returns the path to the config directory (`~/.config` on Linux, `~/Library/Application Support` on macOS, `%APPDATA%` on Windows).
-
-#### `dataDir()`
-Returns the path to the data directory (`~/.local/share` on Linux, `~/Library/Application Support` on macOS, `%LOCALAPPDATA%` on Windows).
-
-#### `cacheDir()`
-Returns the path to the cache directory (`~/.cache` on Linux, `~/Library/Caches` on macOS, `%LOCALAPPDATA%` on Windows).
-
-#### `stateDir()`
-Returns the path to the state directory (`~/.local/state` on Linux, `~/Library/Application Support` on macOS, `%LOCALAPPDATA%` on Windows).
-
-#### `logDir()`
-Returns the path to the log directory (`~/.local/state` on Linux, `~/Library/Logs` on macOS, `%LOCALAPPDATA%` on Windows).
-
-#### `runtimeDir()`
-Returns the path to the runtime directory (`$XDG_RUNTIME_DIR` on Linux), or `null` if unavailable.
-
-#### `fontsDir()`
-Returns the path to the user fonts directory (`~/.local/share/fonts` on Linux, `~/Library/Fonts` on macOS, `%LOCALAPPDATA%/Microsoft/Windows/Fonts` on Windows). On Linux, respects `$XDG_DATA_HOME`.
-
-#### `getBasePath(name)`
-Returns the path to the specified base directory. Valid names: `config`, `data`, `cache`, `state`, `log`, `runtime`.
-
-### System Search Directories
-
-#### `configDirs()`
-Returns the system config directory search path list (`string[]`). On Linux, reads `$XDG_CONFIG_DIRS` (default: `["/etc/xdg"]`). On macOS: `["/Library/Application Support", "/Library/Preferences"]`. On Windows: `[%PROGRAMDATA%]`.
-
-#### `dataDirs()`
-Returns the system data directory search path list (`string[]`). On Linux, reads `$XDG_DATA_DIRS` (default: `["/usr/local/share", "/usr/share"]`). On macOS: `["/Library/Application Support"]`. On Windows: `[%PROGRAMDATA%]`.
-
-### Project Directories
-
-#### `projectDirs(name, options?)`
-Returns an object with app-scoped directories for the given application name. This is a zero-dependency alternative to [`env-paths`](https://github.com/sindresorhus/env-paths).
-
-**Parameters:**
-- `name` (string) — Application name
-- `options.suffix` (string, optional) — Suffix appended to the app name (e.g. `"-nodejs"`)
-- `options.vendor` (string, optional) — Vendor/organization name used as a parent directory. On Linux, the vendor name is normalized to lowercase with spaces replaced by hyphens (e.g. `"My Org"` → `"my-org"`). On macOS and Windows, it is used as-is.
-
-**Returns:** `{ config, data, cache, state, log, temp, runtime }`
-
-On Windows, each directory uses a subdirectory structure (e.g. `%LOCALAPPDATA%/my-app/Config`, `%LOCALAPPDATA%/my-app/Data`).
-
-#### `projectUserDirs(name)`
-Returns an object with project-scoped user directories. Each value is the corresponding user directory with the app name appended as a subdirectory.
-
-**Parameters:**
-- `name` (string) — Application name
-
-**Returns:** `{ desktop, downloads, documents, music, pictures, videos, templates, publicshare }`
 
 ### Utilities
 
-#### `ensureDirSync(dirPath)`
-Ensures the specified directory exists, creating it recursively if necessary. Returns the directory path.
+| Function | Description |
+|---|---|
+| `ensureDirSync(dirPath)` | Creates directory recursively if needed (sync) |
+| `ensureDir(dirPath)` | Creates directory recursively if needed (async) |
+| `getXDGUserDir(key)` | Parse XDG user-dirs.dirs config |
 
-#### `ensureDir(dirPath)`
-Async version of `ensureDirSync`. Returns a promise that resolves with the directory path.
+## TypeScript
 
-```javascript
-import { projectDirs, ensureDirSync, ensureDir } from "os-user-dirs";
+Full type definitions are included. `getPath()` and `getBasePath()` accept union types for auto-completion:
 
-const dirs = projectDirs("my-app");
+```typescript
+import { getPath, getBasePath } from "os-user-dirs";
 
-// Sync
-ensureDirSync(dirs.config);
+getPath("downloads");   // OK — type: string
+getPath("unknown");     // Type error
 
-// Async
-await ensureDir(dirs.data);
+getBasePath("config");  // OK — type: string
+getBasePath("unknown"); // Type error
 ```
 
-## Migration from xdg-basedir
+## Migration Guides
 
-Switching from [xdg-basedir](https://github.com/sindresorhus/xdg-basedir)? See the **[Migration Guide](docs/migration-from-xdg-basedir.md)** for API mapping, code examples (v4 CJS and v5 ESM), and cross-platform benefits.
+Switching from another library? We have you covered:
 
-## Migration from env-paths
+- **[From xdg-basedir](docs/migration-from-xdg-basedir.md)** — API mapping, code examples (v4 CJS and v5 ESM), cross-platform benefits
+- **[From env-paths](docs/migration-from-env-paths.md)** — API mapping, code examples, additional features summary
 
-Switching from [env-paths](https://github.com/sindresorhus/env-paths)? See the **[Migration Guide](docs/migration-from-env-paths.md)** for API mapping, code examples, and a summary of additional features.
+## Documentation
+
+- [API Reference](docs/api.md) — Detailed documentation for all functions
+- [Migration from xdg-basedir](docs/migration-from-xdg-basedir.md)
+- [Migration from env-paths](docs/migration-from-env-paths.md)
 
 ## Migration from v2.x
 
