@@ -25,6 +25,7 @@ import osUserDirs, {
     fontsDir,
     applicationsDir,
     projectUserDirs,
+    homeDir,
     getXDGUserDir,
     ensureDirSync,
     ensureDir,
@@ -76,6 +77,15 @@ for (const [name, fn] of Object.entries(namedExports)) {
         assert.equal(getPath(name), fn());
     });
 }
+
+// homeDir
+console.log('\nhomeDir:');
+test('homeDir() returns absolute path', () => {
+    assert.ok(path.isAbsolute(homeDir()));
+});
+test('homeDir() returns same as os.homedir()', () => {
+    assert.equal(homeDir(), os.homedir());
+});
 
 // binDir
 console.log('\nbinDir:');

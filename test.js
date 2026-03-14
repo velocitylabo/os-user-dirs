@@ -27,6 +27,7 @@ const {
     fontsDir,
     applicationsDir,
     projectUserDirs,
+    homeDir,
     ensureDirSync,
     ensureDir,
 } = require("./");
@@ -161,6 +162,20 @@ describe("os-user-dirs", () => {
             const configPath = path.join(tmpDir, "nonexistent");
             const result = getXDGUserDir("XDG_DOWNLOAD_DIR", configPath);
             assert.strictEqual(result, null);
+        });
+    });
+
+    describe("homeDir", () => {
+        it("returns an absolute path", () => {
+            assert.ok(path.isAbsolute(homeDir()));
+        });
+
+        it("returns the same value as os.homedir()", () => {
+            assert.strictEqual(homeDir(), os.homedir());
+        });
+
+        it("returns a string", () => {
+            assert.strictEqual(typeof homeDir(), "string");
         });
     });
 

@@ -27,6 +27,9 @@ export function publicshare(): string;
 /** Returns the path to the specified user directory. */
 export function getPath(name: DirName): string;
 
+/** Returns the path to the user's home directory. */
+export function homeDir(): string;
+
 /** Returns the path to the user local bin directory (~/.local/bin), or null on Windows. */
 export function binDir(): string | null;
 
@@ -174,6 +177,7 @@ declare const osUserDirs: typeof downloads & {
     projectDirs: typeof projectDirs;
     applicationsDir: typeof applicationsDir;
     projectUserDirs: typeof projectUserDirs;
+    homeDir: typeof homeDir;
     getXDGUserDir: typeof getXDGUserDir;
     ensureDirSync: typeof ensureDirSync;
     ensureDir: typeof ensureDir;

@@ -346,6 +346,10 @@ function applicationsDir() {
     return path.join(homedir, ".local", "share", "applications");
 }
 
+function homeDir() {
+    return os.homedir();
+}
+
 function ensureDirSync(dirPath) {
     if (!dirPath || typeof dirPath !== "string") {
         throw new Error("ensureDirSync requires a non-empty string path");
@@ -388,6 +392,7 @@ module.exports.dataDirs = dataDirs;
 module.exports.projectDirs = projectDirs;
 module.exports.applicationsDir = applicationsDir;
 module.exports.projectUserDirs = projectUserDirs;
+module.exports.homeDir = homeDir;
 module.exports.getXDGUserDir = getXDGUserDir;
 module.exports.ensureDirSync = ensureDirSync;
 module.exports.ensureDir = ensureDir;

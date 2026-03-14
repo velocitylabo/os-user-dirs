@@ -25,7 +25,10 @@ $ npm install os-user-dirs
 ### ESM (recommended)
 
 ```javascript
-import { downloads, desktop, documents, music, pictures, videos, templates, publicshare, getPath } from "os-user-dirs";
+import { downloads, desktop, documents, music, pictures, videos, templates, publicshare, getPath, homeDir } from "os-user-dirs";
+
+homeDir();
+//=> '/home/user'
 
 downloads();
 //=> '/home/user/Downloads'
@@ -189,6 +192,9 @@ Returns the path to the Public Share directory.
 
 ### `getPath(name)`
 Returns the path to the specified user directory. Valid names: `desktop`, `downloads`, `documents`, `music`, `pictures`, `videos`, `templates`, `publicshare`.
+
+### `homeDir()`
+Returns the path to the user's home directory. Uses `os.homedir()` internally.
 
 ### `binDir()`
 Returns the path to the user local bin directory (`~/.local/bin` on Linux/macOS), or `null` on Windows.
