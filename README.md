@@ -9,6 +9,7 @@
 > All-in-one OS directory paths — user directories, XDG base directories, and app-scoped project directories — with zero dependencies.
 
 - Node.js 20 or later
+
 Replaces [`env-paths`](https://github.com/sindresorhus/env-paths), [`xdg-basedir`](https://github.com/sindresorhus/xdg-basedir), and [`platform-folders`](https://github.com/nicbarker/platform-folders) in a single package. CJS + ESM dual support, TypeScript included.
 
 > **Note:** This package was previously published as [`os-downloads`](https://www.npmjs.com/package/os-downloads). The old package is deprecated — please use `os-user-dirs` instead.
@@ -34,7 +35,7 @@ Replaces [`env-paths`](https://github.com/sindresorhus/env-paths), [`xdg-basedir
 $ npm install os-user-dirs
 ```
 
-Requires Node.js 18 or later. Works on Windows, macOS, and Linux.
+Requires Node.js 20 or later. Works on Windows, macOS, and Linux.
 
 ## Quick Start
 
