@@ -10,7 +10,7 @@
 
 > All-in-one OS directory paths — user directories, XDG base directories, and app-scoped project directories — with zero dependencies.
 
-- Node.js 20 or later
+- Node.js 20+, Deno 2+, Bun 1+
 
 Replaces [`env-paths`](https://github.com/sindresorhus/env-paths), [`xdg-basedir`](https://github.com/sindresorhus/xdg-basedir), and [`platform-folders`](https://github.com/nicbarker/platform-folders) in a single package. CJS + ESM dual support, TypeScript included.
 
@@ -29,6 +29,7 @@ Replaces [`env-paths`](https://github.com/sindresorhus/env-paths), [`xdg-basedir
 | XDG search paths | **Yes** | - | **Yes** | - |
 | Project directories | **Yes** | **Yes** | - | - |
 | CJS + ESM | **Both** | ESM only (v3) | ESM only (v5) | CJS |
+| Deno / Bun | **Yes** | - | - | - |
 | TypeScript | **Included** | Included | Included | - |
 
 ## Install
@@ -37,7 +38,7 @@ Replaces [`env-paths`](https://github.com/sindresorhus/env-paths), [`xdg-basedir
 $ npm install os-user-dirs
 ```
 
-Requires Node.js 20 or later. Works on Windows, macOS, and Linux.
+Requires Node.js 20 or later. Works on Windows, macOS, and Linux. Also compatible with [Deno](https://deno.land/) and [Bun](https://bun.sh/).
 
 ## Quick Start
 
@@ -66,6 +67,25 @@ CommonJS is also supported:
 
 ```javascript
 const { downloads, configDir, projectDirs } = require("os-user-dirs");
+```
+
+### Deno
+
+```typescript
+import { downloads, configDir } from "npm:os-user-dirs";
+
+downloads();  //=> '/home/user/Downloads'
+configDir();  //=> '/home/user/.config'
+```
+
+### Bun
+
+```javascript
+import { downloads, configDir } from "os-user-dirs";
+// or: const { downloads, configDir } = require("os-user-dirs");
+
+downloads();  //=> '/home/user/Downloads'
+configDir();  //=> '/home/user/.config'
 ```
 
 ### TypeScript

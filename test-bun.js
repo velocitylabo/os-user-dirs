@@ -1,0 +1,348 @@
+const assert = require("node:assert").strict;
+const path = require("node:path");
+const os = require("node:os");
+const osUserDirs = require("./index.js");
+const {
+    downloads,
+    desktop,
+    documents,
+    music,
+    pictures,
+    videos,
+    templates,
+    publicshare,
+    getPath,
+    binDir,
+    configDir,
+    dataDir,
+    cacheDir,
+    stateDir,
+    logDir,
+    runtimeDir,
+    getBasePath,
+    configDirs,
+    dataDirs,
+    projectDirs,
+    fontsDir,
+    applicationsDir,
+    projectUserDirs,
+    homeDir,
+    getXDGUserDir,
+    trashDir,
+    ensureDirSync,
+    ensureDir,
+    getAllDirs,
+    user,
+    base,
+    project,
+} = require("./index.js");
+
+const home = os.homedir();
+let passed = 0;
+let failed = 0;
+
+function test(name, fn) {
+    try {
+        fn();
+        passed++;
+        console.log(`  ✓ ${name}`);
+    } catch (e) {
+        failed++;
+        console.error(`  ✗ ${name}`);
+        console.error(`    ${e.message}`);
+    }
+}
+
+console.log("Bun compatibility tests\n");
+
+// Default export (backward compatibility)
+console.log("default export:");
+test("default export is callable", () => {
+    assert.equal(typeof osUserDirs, "function");
+});
+test("default export returns Downloads path", () => {
+    const result = osUserDirs();
+    assert.ok(path.isAbsolute(result));
+    assert.ok(result.startsWith(home));
+});
+
+// Named exports
+console.log("\nnamed exports:");
+const namedExports = { downloads, desktop, documents, music, pictures, videos, templates, publicshare };
+for (const [name, fn] of Object.entries(namedExports)) {
+    test(`${name}() returns absolute path under home`, () => {
+        const result = fn();
+        assert.ok(path.isAbsolute(result), `${name}() should be absolute`);
+        assert.ok(result.startsWith(home), `${name}() should start with home`);
+    });
+}
+
+// getPath matches named exports
+console.log("\ngetPath consistency:");
+for (const [name, fn] of Object.entries(namedExports)) {
+    test(`getPath("${name}") === ${name}()`, () => {
+        assert.equal(getPath(name), fn());
+    });
+}
+
+// homeDir
+console.log("\nhomeDir:");
+test("homeDir() returns absolute path", () => {
+    assert.ok(path.isAbsolute(homeDir()));
+});
+test("homeDir() returns same as os.homedir()", () => {
+    assert.equal(homeDir(), os.homedir());
+});
+
+// binDir
+console.log("\nbinDir:");
+test("binDir() returns string or null", () => {
+    const result = binDir();
+    assert.ok(result === null || typeof result === "string");
+});
+if (process.platform !== "win32") {
+    test("binDir() returns ~/.local/bin", () => {
+        assert.equal(binDir(), path.join(home, ".local", "bin"));
+    });
+}
+
+// Base directory exports
+console.log("\nbase directory exports:");
+const baseFns = { configDir, dataDir, cacheDir, stateDir, logDir };
+for (const [name, fn] of Object.entries(baseFns)) {
+    test(`${name}() returns absolute path`, () => {
+        const result = fn();
+        assert.ok(path.isAbsolute(result), `${name}() should be absolute`);
+    });
+}
+test("runtimeDir() returns string or null", () => {
+    const result = runtimeDir();
+    assert.ok(result === null || typeof result === "string");
+});
+
+// getBasePath consistency
+console.log("\ngetBasePath consistency:");
+test('getBasePath("config") === configDir()', () => {
+    assert.equal(getBasePath("config"), configDir());
+});
+test('getBasePath("data") === dataDir()', () => {
+    assert.equal(getBasePath("data"), dataDir());
+});
+test('getBasePath("cache") === cacheDir()', () => {
+    assert.equal(getBasePath("cache"), cacheDir());
+});
+test('getBasePath("state") === stateDir()', () => {
+    assert.equal(getBasePath("state"), stateDir());
+});
+test('getBasePath("log") === logDir()', () => {
+    assert.equal(getBasePath("log"), logDir());
+});
+test('getBasePath("runtime") === runtimeDir()', () => {
+    assert.equal(getBasePath("runtime"), runtimeDir());
+});
+
+// configDirs / dataDirs
+console.log("\nsearch directory exports:");
+test("configDirs() returns an array", () => {
+    const result = configDirs();
+    assert.ok(Array.isArray(result), "configDirs() should return an array");
+    assert.ok(result.length > 0, "configDirs() should return non-empty array");
+});
+test("configDirs() entries are absolute paths", () => {
+    configDirs().forEach((dir) => {
+        assert.ok(path.isAbsolute(dir), `expected absolute path: ${dir}`);
+    });
+});
+test("dataDirs() returns an array", () => {
+    const result = dataDirs();
+    assert.ok(Array.isArray(result), "dataDirs() should return an array");
+    assert.ok(result.length > 0, "dataDirs() should return non-empty array");
+});
+test("dataDirs() entries are absolute paths", () => {
+    dataDirs().forEach((dir) => {
+        assert.ok(path.isAbsolute(dir), `expected absolute path: ${dir}`);
+    });
+});
+
+// projectDirs
+console.log("\nprojectDirs:");
+test("projectDirs is a function", () => {
+    assert.equal(typeof projectDirs, "function");
+});
+test("projectDirs returns object with all keys", () => {
+    const dirs = projectDirs("test-app");
+    assert.ok(dirs.config);
+    assert.ok(dirs.data);
+    assert.ok(dirs.cache);
+    assert.ok(dirs.state);
+    assert.ok(dirs.log);
+    assert.ok(dirs.temp);
+});
+test("projectDirs paths contain app name", () => {
+    const dirs = projectDirs("bun-test-app");
+    for (const [key, val] of Object.entries(dirs)) {
+        if (val !== null) {
+            assert.ok(val.includes("bun-test-app"), `${key} should contain app name`);
+        }
+    }
+});
+test("projectDirs suffix option works", () => {
+    const dirs = projectDirs("my-app", { suffix: "-nodejs" });
+    assert.ok(dirs.config.includes("my-app-nodejs"));
+});
+test("projectDirs vendor option works", () => {
+    const dirs = projectDirs("my-app", { vendor: "TestVendor" });
+    for (const [key, val] of Object.entries(dirs)) {
+        if (val !== null) {
+            assert.ok(val.includes("my-app"), `${key} should contain app name`);
+        }
+    }
+});
+test("projectDirs vendor + suffix works", () => {
+    const dirs = projectDirs("my-app", { vendor: "TestOrg", suffix: "-nodejs" });
+    assert.ok(dirs.config.includes("my-app-nodejs"));
+});
+
+// projectUserDirs
+console.log("\nprojectUserDirs:");
+test("projectUserDirs is a function", () => {
+    assert.equal(typeof projectUserDirs, "function");
+});
+test("projectUserDirs returns object with all 8 keys", () => {
+    const dirs = projectUserDirs("test-app");
+    const expectedKeys = ["desktop", "downloads", "documents", "music", "pictures", "videos", "templates", "publicshare"];
+    assert.deepEqual(Object.keys(dirs).sort(), expectedKeys.sort());
+});
+test("projectUserDirs paths contain app name", () => {
+    const dirs = projectUserDirs("bun-test-app");
+    for (const [key, val] of Object.entries(dirs)) {
+        assert.ok(val.includes("bun-test-app"), `${key} should contain app name`);
+    }
+});
+test("projectUserDirs paths match getPath + app name", () => {
+    const dirs = projectUserDirs("test-app");
+    assert.equal(dirs.downloads, path.join(getPath("downloads"), "test-app"));
+    assert.equal(dirs.desktop, path.join(getPath("desktop"), "test-app"));
+});
+
+// fontsDir
+console.log("\nfontsDir:");
+test("fontsDir() returns absolute path", () => {
+    const result = fontsDir();
+    assert.ok(path.isAbsolute(result), "fontsDir() should be absolute");
+});
+test("fontsDir() path ends with fonts or Fonts", () => {
+    const result = fontsDir();
+    assert.ok(path.basename(result).match(/fonts/i), "should end with fonts");
+});
+
+// applicationsDir
+console.log("\napplicationsDir:");
+test("applicationsDir() returns absolute path", () => {
+    const result = applicationsDir();
+    assert.ok(path.isAbsolute(result), "applicationsDir() should be absolute");
+});
+test("applicationsDir() returns a string", () => {
+    assert.equal(typeof applicationsDir(), "string");
+});
+
+// trashDir
+console.log("\ntrashDir:");
+test("trashDir() returns string or null", () => {
+    const result = trashDir();
+    assert.ok(result === null || typeof result === "string");
+});
+if (process.platform !== "win32") {
+    test("trashDir() returns an absolute path", () => {
+        assert.ok(path.isAbsolute(trashDir()));
+    });
+}
+
+// ensureDirSync / ensureDir
+console.log("\nensureDirSync / ensureDir:");
+test("ensureDirSync is a function", () => {
+    assert.equal(typeof ensureDirSync, "function");
+});
+test("ensureDir is a function", () => {
+    assert.equal(typeof ensureDir, "function");
+});
+
+// getAllDirs
+console.log("\ngetAllDirs:");
+test("getAllDirs is a function", () => {
+    assert.equal(typeof getAllDirs, "function");
+});
+test("getAllDirs returns object with 19 keys", () => {
+    const dirs = getAllDirs();
+    assert.equal(Object.keys(dirs).length, 19);
+});
+test("getAllDirs values match individual functions", () => {
+    const dirs = getAllDirs();
+    assert.equal(dirs.downloads, downloads());
+    assert.equal(dirs.configDir, configDir());
+    assert.equal(dirs.homeDir, homeDir());
+});
+test("getAllDirs non-null values are absolute paths", () => {
+    const dirs = getAllDirs();
+    for (const [key, val] of Object.entries(dirs)) {
+        if (val !== null) {
+            assert.ok(path.isAbsolute(val), `${key} should be absolute`);
+        }
+    }
+});
+
+// Utility exports exist
+console.log("\nutility exports:");
+test("getXDGUserDir is a function", () => {
+    assert.equal(typeof getXDGUserDir, "function");
+});
+test("getXDGDownloadDir is not exported", () => {
+    assert.equal(osUserDirs.getXDGDownloadDir, undefined);
+});
+
+// Namespace exports
+console.log("\nnamespace exports:");
+test("user namespace is an object", () => {
+    assert.equal(typeof user, "object");
+});
+test("user.downloads() matches downloads()", () => {
+    assert.equal(user.downloads(), downloads());
+});
+test("user.desktop() matches desktop()", () => {
+    assert.equal(user.desktop(), desktop());
+});
+test("user.homeDir() matches homeDir()", () => {
+    assert.equal(user.homeDir(), homeDir());
+});
+test("user.fontsDir() matches fontsDir()", () => {
+    assert.equal(user.fontsDir(), fontsDir());
+});
+test("user.trashDir() matches trashDir()", () => {
+    assert.equal(user.trashDir(), trashDir());
+});
+test("base namespace is an object", () => {
+    assert.equal(typeof base, "object");
+});
+test("base.configDir() matches configDir()", () => {
+    assert.equal(base.configDir(), configDir());
+});
+test("base.dataDir() matches dataDir()", () => {
+    assert.equal(base.dataDir(), dataDir());
+});
+test("base.configDirs() matches configDirs()", () => {
+    assert.deepEqual(base.configDirs(), configDirs());
+});
+test("project namespace is an object", () => {
+    assert.equal(typeof project, "object");
+});
+test('project.dirs("test-app") matches projectDirs("test-app")', () => {
+    assert.deepEqual(project.dirs("test-app"), projectDirs("test-app"));
+});
+test('project.userDirs("test-app") matches projectUserDirs("test-app")', () => {
+    assert.deepEqual(project.userDirs("test-app"), projectUserDirs("test-app"));
+});
+
+console.log(`\n${passed} passed, ${failed} failed`);
+if (failed > 0) {
+    process.exitCode = 1;
+}
