@@ -30,6 +30,7 @@ import osUserDirs, {
     trashDir,
     ensureDirSync,
     ensureDir,
+    getAllDirs,
 } from './index.mjs';
 
 const home = os.homedir();
@@ -259,6 +260,30 @@ test('ensureDirSync is a function', () => {
 });
 test('ensureDir is a function', () => {
     assert.equal(typeof ensureDir, 'function');
+});
+
+// getAllDirs
+console.log('\ngetAllDirs:');
+test('getAllDirs is a function', () => {
+    assert.equal(typeof getAllDirs, 'function');
+});
+test('getAllDirs returns object with 19 keys', () => {
+    const dirs = getAllDirs();
+    assert.equal(Object.keys(dirs).length, 19);
+});
+test('getAllDirs values match individual functions', () => {
+    const dirs = getAllDirs();
+    assert.equal(dirs.downloads, downloads());
+    assert.equal(dirs.configDir, configDir());
+    assert.equal(dirs.homeDir, homeDir());
+});
+test('getAllDirs non-null values are absolute paths', () => {
+    const dirs = getAllDirs();
+    for (const [key, val] of Object.entries(dirs)) {
+        if (val !== null) {
+            assert.ok(path.isAbsolute(val), `${key} should be absolute`);
+        }
+    }
 });
 
 // Utility exports exist

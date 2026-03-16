@@ -429,6 +429,44 @@ export function ensureDirSync(dirPath: string): string;
  */
 export function ensureDir(dirPath: string): Promise<string>;
 
+interface GetAllDirsResult {
+    downloads: string;
+    desktop: string;
+    documents: string;
+    music: string;
+    pictures: string;
+    videos: string;
+    templates: string;
+    publicshare: string;
+    configDir: string;
+    dataDir: string;
+    cacheDir: string;
+    stateDir: string;
+    logDir: string;
+    runtimeDir: string | null;
+    fontsDir: string;
+    binDir: string | null;
+    applicationsDir: string;
+    trashDir: string | null;
+    homeDir: string;
+}
+
+/**
+ * Returns all directory paths as a single object.
+ * Useful for debugging, configuration dumps, or diagnostics.
+ * Does not include array-returning functions (`configDirs`, `dataDirs`)
+ * or functions requiring arguments (`projectDirs`, `projectUserDirs`).
+ * @example
+ * ```ts
+ * import { getAllDirs } from 'os-user-dirs';
+ * const dirs = getAllDirs();
+ * console.log(dirs.downloads);  // '/home/user/Downloads'
+ * console.log(dirs.configDir);  // '/home/user/.config'
+ * console.log(dirs.homeDir);    // '/home/user'
+ * ```
+ */
+export function getAllDirs(): GetAllDirsResult;
+
 declare const osUserDirs: typeof downloads & {
     downloads: typeof downloads;
     desktop: typeof desktop;
@@ -458,6 +496,7 @@ declare const osUserDirs: typeof downloads & {
     getXDGUserDir: typeof getXDGUserDir;
     ensureDirSync: typeof ensureDirSync;
     ensureDir: typeof ensureDir;
+    getAllDirs: typeof getAllDirs;
 };
 
 export default osUserDirs;

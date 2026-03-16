@@ -167,6 +167,7 @@ Returns the path to the specified base directory. Valid names: `config`, `data`,
 | Get user's Downloads folder | `downloads()` |
 | Get user's Documents folder | `documents()` |
 | Get all app-scoped dirs at once | `projectDirs("my-app")` |
+| Dump all directory paths | `getAllDirs()` |
 | Find system-wide config locations | `configDirs()` |
 | Ensure a directory exists | `ensureDir(path)` / `ensureDirSync(path)` |
 | Get user's home directory | `homeDir()` |
@@ -250,6 +251,7 @@ dirs.downloads //=> '/home/user/Downloads/my-app'
 
 | Function | Description |
 |---|---|
+| `getAllDirs()` | Returns all directory paths as a single object |
 | `ensureDirSync(dirPath)` | Creates directory recursively if needed (sync) |
 | `ensureDir(dirPath)` | Creates directory recursively if needed (async) |
 | `getXDGUserDir(key)` | Parse XDG user-dirs.dirs config |

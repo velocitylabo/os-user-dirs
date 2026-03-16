@@ -31,6 +31,7 @@ const {
     trashDir,
     ensureDirSync,
     ensureDir,
+    getAllDirs,
 } = require("./");
 
 describe("os-user-dirs", () => {
@@ -934,6 +935,69 @@ describe("os-user-dirs", () => {
         it("rejects when path is not provided", async () => {
             await assert.rejects(() => ensureDir(), /non-empty string/);
             await assert.rejects(() => ensureDir(""), /non-empty string/);
+        });
+    });
+
+    describe("getAllDirs", () => {
+        it("returns an object with all expected keys", () => {
+            const dirs = getAllDirs();
+            const expectedKeys = [
+                "downloads", "desktop", "documents", "music", "pictures",
+                "videos", "templates", "publicshare",
+                "configDir", "dataDir", "cacheDir", "stateDir", "logDir",
+                "runtimeDir", "fontsDir", "binDir", "applicationsDir",
+                "trashDir", "homeDir",
+            ];
+            assert.deepStrictEqual(Object.keys(dirs).sort(), expectedKeys.sort());
+        });
+
+        it("returns 19 keys", () => {
+            const dirs = getAllDirs();
+            assert.strictEqual(Object.keys(dirs).length, 19);
+        });
+
+        it("all non-null values are strings", () => {
+            const dirs = getAllDirs();
+            for (const [key, val] of Object.entries(dirs)) {
+                assert.ok(val === null || typeof val === "string", `${key} should be string or null`);
+            }
+        });
+
+        it("all non-null values are absolute paths", () => {
+            const dirs = getAllDirs();
+            for (const [key, val] of Object.entries(dirs)) {
+                if (val !== null) {
+                    assert.ok(path.isAbsolute(val), `${key} should be absolute: ${val}`);
+                }
+            }
+        });
+
+        it("values match individual function calls", () => {
+            const dirs = getAllDirs();
+            assert.strictEqual(dirs.downloads, downloads());
+            assert.strictEqual(dirs.desktop, desktop());
+            assert.strictEqual(dirs.documents, documents());
+            assert.strictEqual(dirs.music, music());
+            assert.strictEqual(dirs.pictures, pictures());
+            assert.strictEqual(dirs.videos, videos());
+            assert.strictEqual(dirs.templates, templates());
+            assert.strictEqual(dirs.publicshare, publicshare());
+            assert.strictEqual(dirs.configDir, configDir());
+            assert.strictEqual(dirs.dataDir, dataDir());
+            assert.strictEqual(dirs.cacheDir, cacheDir());
+            assert.strictEqual(dirs.stateDir, stateDir());
+            assert.strictEqual(dirs.logDir, logDir());
+            assert.strictEqual(dirs.runtimeDir, runtimeDir());
+            assert.strictEqual(dirs.fontsDir, fontsDir());
+            assert.strictEqual(dirs.binDir, binDir());
+            assert.strictEqual(dirs.applicationsDir, applicationsDir());
+            assert.strictEqual(dirs.trashDir, trashDir());
+            assert.strictEqual(dirs.homeDir, homeDir());
+        });
+
+        it("homeDir matches os.homedir()", () => {
+            const dirs = getAllDirs();
+            assert.strictEqual(dirs.homeDir, os.homedir());
         });
     });
 

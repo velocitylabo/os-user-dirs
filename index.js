@@ -374,6 +374,30 @@ function homeDir() {
     return os.homedir();
 }
 
+function getAllDirs() {
+    return {
+        downloads: downloads(),
+        desktop: desktop(),
+        documents: documents(),
+        music: music(),
+        pictures: pictures(),
+        videos: videos(),
+        templates: templates(),
+        publicshare: publicshare(),
+        configDir: configDir(),
+        dataDir: dataDir(),
+        cacheDir: cacheDir(),
+        stateDir: stateDir(),
+        logDir: logDir(),
+        runtimeDir: runtimeDir(),
+        fontsDir: fontsDir(),
+        binDir: binDir(),
+        applicationsDir: applicationsDir(),
+        trashDir: trashDir(),
+        homeDir: homeDir(),
+    };
+}
+
 function ensureDirSync(dirPath) {
     if (!dirPath || typeof dirPath !== "string") {
         throw new Error("ensureDirSync requires a non-empty string path");
@@ -421,3 +445,4 @@ module.exports.getXDGUserDir = getXDGUserDir;
 module.exports.ensureDirSync = ensureDirSync;
 module.exports.trashDir = trashDir;
 module.exports.ensureDir = ensureDir;
+module.exports.getAllDirs = getAllDirs;
