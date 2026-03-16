@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.2.0](https://github.com/velocitylabo/os-user-dirs/compare/v3.1.0...v3.2.0) (2026-03-16)
+
+
+### Features
+
+* add Deno and Bun compatibility tests and CI ([#51](https://github.com/velocitylabo/os-user-dirs/issues/51)) ([933061b](https://github.com/velocitylabo/os-user-dirs/commit/933061b92b92ab76919e74ff8b48dda8025a9797))
+* add getAllDirs() function ([#53](https://github.com/velocitylabo/os-user-dirs/issues/53)) ([f337c75](https://github.com/velocitylabo/os-user-dirs/commit/f337c7513a57ec2487decef0bf3c8cc2ba0906e1))
+* add namespace exports (user, base, project) ([#63](https://github.com/velocitylabo/os-user-dirs/issues/63)) ([d8b17ec](https://github.com/velocitylabo/os-user-dirs/commit/d8b17ec7571275769603211d6a6cf3615e2ed267))
+
 ## [3.1.0](https://github.com/velocitylabo/os-user-dirs/compare/v3.0.1...v3.1.0) (2026-03-16)
 
 
