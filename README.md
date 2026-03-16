@@ -3,6 +3,8 @@
 [![npm version](https://img.shields.io/npm/v/os-user-dirs.svg)](https://www.npmjs.com/package/os-user-dirs)
 [![npm downloads](https://img.shields.io/npm/dw/os-user-dirs.svg)](https://www.npmjs.com/package/os-user-dirs)
 [![CI](https://github.com/velocitylabo/os-user-dirs/actions/workflows/ci.yml/badge.svg)](https://github.com/velocitylabo/os-user-dirs/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/velocitylabo/os-user-dirs/graph/badge.svg)](https://codecov.io/gh/velocitylabo/os-user-dirs)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/os-user-dirs)](https://bundlephobia.com/package/os-user-dirs)
 [![Node.js](https://img.shields.io/node/v/os-user-dirs.svg)](https://nodejs.org)
 [![license](https://img.shields.io/npm/l/os-user-dirs.svg)](https://github.com/velocitylabo/os-user-dirs/blob/master/LICENSE)
 
@@ -153,6 +155,24 @@ Returns the path to the user fonts directory (`~/.local/share/fonts` on Linux, `
 
 #### `getBasePath(name)`
 Returns the path to the specified base directory. Valid names: `config`, `data`, `cache`, `state`, `log`, `runtime`.
+
+## Which function should I use?
+
+| Use case | Function |
+|---|---|
+| Store app config files | `configDir()` or `projectDirs("my-app").config` |
+| Store app data / databases | `dataDir()` or `projectDirs("my-app").data` |
+| Store app cache | `cacheDir()` or `projectDirs("my-app").cache` |
+| Store app logs | `logDir()` or `projectDirs("my-app").log` |
+| Get user's Downloads folder | `downloads()` |
+| Get user's Documents folder | `documents()` |
+| Get all app-scoped dirs at once | `projectDirs("my-app")` |
+| Find system-wide config locations | `configDirs()` |
+| Ensure a directory exists | `ensureDir(path)` / `ensureDirSync(path)` |
+| Get user's home directory | `homeDir()` |
+
+> For the full API with platform-specific details, see the **[API Reference](docs/api.md)**.
+
 ## API Overview
 
 ### User Directories
@@ -253,7 +273,6 @@ getBasePath("unknown"); // Type error
 - **[Electron Guide](docs/guide-electron.md)** — Using os-user-dirs in Electron apps: `app.getPath()` mapping, main/renderer process patterns, vendor-scoped directories
 - **[CLI Tools Guide](docs/guide-cli-tools.md)** — Using `projectDirs()` with commander, yargs, and oclif for config, cache, and log management
 
-## Migration from xdg-basedir
 ## Migration Guides
 
 Switching from another library? We have you covered:
