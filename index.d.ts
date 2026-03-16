@@ -3,12 +3,12 @@ type DirName = "desktop" | "downloads" | "documents" | "music" | "pictures" | "v
 /**
  * Returns the path to the Desktop directory.
  * @example
- * ```js
- * const { desktop } = require('os-user-dirs');
- * console.log(desktop());
+ * ```ts
+ * import { desktop } from 'os-user-dirs';
+ * const dir = desktop();
  * // Linux:   '/home/user/Desktop'
  * // macOS:   '/Users/user/Desktop'
- * // Windows: 'C:\Users\user\Desktop'
+ * // Windows: 'C:\\Users\\user\\Desktop'
  * ```
  */
 export function desktop(): string;
@@ -16,12 +16,12 @@ export function desktop(): string;
 /**
  * Returns the path to the Downloads directory.
  * @example
- * ```js
- * const { downloads } = require('os-user-dirs');
- * console.log(downloads());
+ * ```ts
+ * import { downloads } from 'os-user-dirs';
+ * const dir = downloads();
  * // Linux:   '/home/user/Downloads'
  * // macOS:   '/Users/user/Downloads'
- * // Windows: 'C:\Users\user\Downloads'
+ * // Windows: 'C:\\Users\\user\\Downloads'
  * ```
  */
 export function downloads(): string;
@@ -29,12 +29,12 @@ export function downloads(): string;
 /**
  * Returns the path to the Documents directory.
  * @example
- * ```js
- * const { documents } = require('os-user-dirs');
- * console.log(documents());
+ * ```ts
+ * import { documents } from 'os-user-dirs';
+ * const dir = documents();
  * // Linux:   '/home/user/Documents'
  * // macOS:   '/Users/user/Documents'
- * // Windows: 'C:\Users\user\Documents'
+ * // Windows: 'C:\\Users\\user\\Documents'
  * ```
  */
 export function documents(): string;
@@ -42,12 +42,12 @@ export function documents(): string;
 /**
  * Returns the path to the Music directory.
  * @example
- * ```js
- * const { music } = require('os-user-dirs');
- * console.log(music());
+ * ```ts
+ * import { music } from 'os-user-dirs';
+ * const dir = music();
  * // Linux:   '/home/user/Music'
  * // macOS:   '/Users/user/Music'
- * // Windows: 'C:\Users\user\Music'
+ * // Windows: 'C:\\Users\\user\\Music'
  * ```
  */
 export function music(): string;
@@ -55,12 +55,12 @@ export function music(): string;
 /**
  * Returns the path to the Pictures directory.
  * @example
- * ```js
- * const { pictures } = require('os-user-dirs');
- * console.log(pictures());
+ * ```ts
+ * import { pictures } from 'os-user-dirs';
+ * const dir = pictures();
  * // Linux:   '/home/user/Pictures'
  * // macOS:   '/Users/user/Pictures'
- * // Windows: 'C:\Users\user\Pictures'
+ * // Windows: 'C:\\Users\\user\\Pictures'
  * ```
  */
 export function pictures(): string;
@@ -68,12 +68,12 @@ export function pictures(): string;
 /**
  * Returns the path to the Videos directory (Movies on macOS).
  * @example
- * ```js
- * const { videos } = require('os-user-dirs');
- * console.log(videos());
+ * ```ts
+ * import { videos } from 'os-user-dirs';
+ * const dir = videos();
  * // Linux:   '/home/user/Videos'
  * // macOS:   '/Users/user/Movies'
- * // Windows: 'C:\Users\user\Videos'
+ * // Windows: 'C:\\Users\\user\\Videos'
  * ```
  */
 export function videos(): string;
@@ -81,12 +81,12 @@ export function videos(): string;
 /**
  * Returns the path to the Templates directory.
  * @example
- * ```js
- * const { templates } = require('os-user-dirs');
- * console.log(templates());
+ * ```ts
+ * import { templates } from 'os-user-dirs';
+ * const dir = templates();
  * // Linux:   '/home/user/Templates'
  * // macOS:   '/Users/user/Templates'
- * // Windows: 'C:\Users\user\Templates'
+ * // Windows: 'C:\\Users\\user\\Templates'
  * ```
  */
 export function templates(): string;
@@ -94,23 +94,24 @@ export function templates(): string;
 /**
  * Returns the path to the Public Share directory.
  * @example
- * ```js
- * const { publicshare } = require('os-user-dirs');
- * console.log(publicshare());
+ * ```ts
+ * import { publicshare } from 'os-user-dirs';
+ * const dir = publicshare();
  * // Linux:   '/home/user/Public'
  * // macOS:   '/Users/user/Public'
- * // Windows: 'C:\Users\user\Public'
+ * // Windows: 'C:\\Users\\user\\Public'
  * ```
  */
 export function publicshare(): string;
 
 /**
  * Returns the path to the specified user directory.
+ * @param name - Directory name to resolve
  * @example
- * ```js
- * const { getPath } = require('os-user-dirs');
- * console.log(getPath('downloads')); // '/home/user/Downloads'
- * console.log(getPath('desktop'));    // '/home/user/Desktop'
+ * ```ts
+ * import { getPath } from 'os-user-dirs';
+ * const dir = getPath('downloads'); // '/home/user/Downloads'
+ * const dir2 = getPath('desktop');  // '/home/user/Desktop'
  * ```
  */
 export function getPath(name: DirName): string;
@@ -118,12 +119,12 @@ export function getPath(name: DirName): string;
 /**
  * Returns the path to the user's home directory.
  * @example
- * ```js
- * const { homeDir } = require('os-user-dirs');
- * console.log(homeDir());
+ * ```ts
+ * import { homeDir } from 'os-user-dirs';
+ * const dir = homeDir();
  * // Linux:   '/home/user'
  * // macOS:   '/Users/user'
- * // Windows: 'C:\Users\user'
+ * // Windows: 'C:\\Users\\user'
  * ```
  */
 export function homeDir(): string;
@@ -131,9 +132,9 @@ export function homeDir(): string;
 /**
  * Returns the path to the user local bin directory (~/.local/bin), or null on Windows.
  * @example
- * ```js
- * const { binDir } = require('os-user-dirs');
- * console.log(binDir());
+ * ```ts
+ * import { binDir } from 'os-user-dirs';
+ * const dir = binDir();
  * // Linux/macOS: '/home/user/.local/bin'
  * // Windows:     null
  * ```
@@ -145,12 +146,12 @@ type BaseDirName = "config" | "data" | "cache" | "state" | "log" | "runtime";
 /**
  * Returns the path to the XDG config directory.
  * @example
- * ```js
- * const { configDir } = require('os-user-dirs');
- * console.log(configDir());
+ * ```ts
+ * import { configDir } from 'os-user-dirs';
+ * const dir = configDir();
  * // Linux:   '/home/user/.config'
  * // macOS:   '/Users/user/Library/Application Support'
- * // Windows: 'C:\Users\user\AppData\Roaming'
+ * // Windows: 'C:\\Users\\user\\AppData\\Roaming'
  * ```
  */
 export function configDir(): string;
@@ -158,12 +159,12 @@ export function configDir(): string;
 /**
  * Returns the path to the XDG data directory.
  * @example
- * ```js
- * const { dataDir } = require('os-user-dirs');
- * console.log(dataDir());
+ * ```ts
+ * import { dataDir } from 'os-user-dirs';
+ * const dir = dataDir();
  * // Linux:   '/home/user/.local/share'
  * // macOS:   '/Users/user/Library/Application Support'
- * // Windows: 'C:\Users\user\AppData\Local'
+ * // Windows: 'C:\\Users\\user\\AppData\\Local'
  * ```
  */
 export function dataDir(): string;
@@ -171,12 +172,12 @@ export function dataDir(): string;
 /**
  * Returns the path to the XDG cache directory.
  * @example
- * ```js
- * const { cacheDir } = require('os-user-dirs');
- * console.log(cacheDir());
+ * ```ts
+ * import { cacheDir } from 'os-user-dirs';
+ * const dir = cacheDir();
  * // Linux:   '/home/user/.cache'
  * // macOS:   '/Users/user/Library/Caches'
- * // Windows: 'C:\Users\user\AppData\Local'
+ * // Windows: 'C:\\Users\\user\\AppData\\Local'
  * ```
  */
 export function cacheDir(): string;
@@ -184,12 +185,12 @@ export function cacheDir(): string;
 /**
  * Returns the path to the XDG state directory.
  * @example
- * ```js
- * const { stateDir } = require('os-user-dirs');
- * console.log(stateDir());
+ * ```ts
+ * import { stateDir } from 'os-user-dirs';
+ * const dir = stateDir();
  * // Linux:   '/home/user/.local/state'
  * // macOS:   '/Users/user/Library/Application Support'
- * // Windows: 'C:\Users\user\AppData\Local'
+ * // Windows: 'C:\\Users\\user\\AppData\\Local'
  * ```
  */
 export function stateDir(): string;
@@ -197,12 +198,12 @@ export function stateDir(): string;
 /**
  * Returns the path to the log directory.
  * @example
- * ```js
- * const { logDir } = require('os-user-dirs');
- * console.log(logDir());
+ * ```ts
+ * import { logDir } from 'os-user-dirs';
+ * const dir = logDir();
  * // Linux:   '/home/user/.local/state'
  * // macOS:   '/Users/user/Library/Logs'
- * // Windows: 'C:\Users\user\AppData\Local'
+ * // Windows: 'C:\\Users\\user\\AppData\\Local'
  * ```
  */
 export function logDir(): string;
@@ -210,9 +211,9 @@ export function logDir(): string;
 /**
  * Returns the path to the XDG runtime directory, or null if unavailable.
  * @example
- * ```js
- * const { runtimeDir } = require('os-user-dirs');
- * console.log(runtimeDir());
+ * ```ts
+ * import { runtimeDir } from 'os-user-dirs';
+ * const dir = runtimeDir();
  * // Linux:   '/run/user/1000' (if $XDG_RUNTIME_DIR is set)
  * // macOS:   null
  * // Windows: null
@@ -223,12 +224,12 @@ export function runtimeDir(): string | null;
 /**
  * Returns the path to the user fonts directory.
  * @example
- * ```js
- * const { fontsDir } = require('os-user-dirs');
- * console.log(fontsDir());
+ * ```ts
+ * import { fontsDir } from 'os-user-dirs';
+ * const dir = fontsDir();
  * // Linux:   '/home/user/.local/share/fonts'
  * // macOS:   '/Users/user/Library/Fonts'
- * // Windows: 'C:\Users\user\AppData\Local\Microsoft\Windows\Fonts'
+ * // Windows: 'C:\\Users\\user\\AppData\\Local\\Microsoft\\Windows\\Fonts'
  * ```
  */
 export function fontsDir(): string;
@@ -239,12 +240,12 @@ export function fontsDir(): string;
  * On macOS: `["/Library/Application Support", "/Library/Preferences"]`.
  * On Windows: `[%PROGRAMDATA%]`.
  * @example
- * ```js
- * const { configDirs } = require('os-user-dirs');
- * console.log(configDirs());
+ * ```ts
+ * import { configDirs } from 'os-user-dirs';
+ * const dirs = configDirs();
  * // Linux:   ['/etc/xdg']
  * // macOS:   ['/Library/Application Support', '/Library/Preferences']
- * // Windows: ['C:\ProgramData']
+ * // Windows: ['C:\\ProgramData']
  * ```
  */
 export function configDirs(): string[];
@@ -255,24 +256,25 @@ export function configDirs(): string[];
  * On macOS: `["/Library/Application Support"]`.
  * On Windows: `[%PROGRAMDATA%]`.
  * @example
- * ```js
- * const { dataDirs } = require('os-user-dirs');
- * console.log(dataDirs());
+ * ```ts
+ * import { dataDirs } from 'os-user-dirs';
+ * const dirs = dataDirs();
  * // Linux:   ['/usr/local/share', '/usr/share']
  * // macOS:   ['/Library/Application Support']
- * // Windows: ['C:\ProgramData']
+ * // Windows: ['C:\\ProgramData']
  * ```
  */
 export function dataDirs(): string[];
 
 /**
  * Returns the path to the specified base directory.
+ * @param name - Base directory name to resolve
  * @example
- * ```js
- * const { getBasePath } = require('os-user-dirs');
- * console.log(getBasePath('config'));  // '/home/user/.config'
- * console.log(getBasePath('data'));    // '/home/user/.local/share'
- * console.log(getBasePath('runtime')); // '/run/user/1000' or null
+ * ```ts
+ * import { getBasePath } from 'os-user-dirs';
+ * const config = getBasePath('config');  // '/home/user/.config'
+ * const data = getBasePath('data');      // '/home/user/.local/share'
+ * const runtime = getBasePath('runtime'); // '/run/user/1000' or null
  * ```
  */
 export function getBasePath(name: "config"): string;
@@ -303,23 +305,28 @@ interface ProjectDirsResult {
 /**
  * Returns application-scoped directories for the given app name.
  * @param name - Application name used to derive directory paths
- * @param options - Optional settings (e.g. suffix)
+ * @param options - Optional settings (e.g. vendor, suffix)
  * @example
- * ```js
- * const { projectDirs } = require('os-user-dirs');
+ * ```ts
+ * import { projectDirs } from 'os-user-dirs';
  * const dirs = projectDirs('my-app');
- * console.log(dirs.config); // Linux: '/home/user/.config/my-app'
- * console.log(dirs.data);   // Linux: '/home/user/.local/share/my-app'
- * console.log(dirs.cache);  // Linux: '/home/user/.cache/my-app'
+ * // Linux:   dirs.config => '/home/user/.config/my-app'
+ * // macOS:   dirs.config => '/Users/user/Library/Application Support/my-app'
+ * // Windows: dirs.config => 'C:\\Users\\user\\AppData\\Local\\my-app\\Config'
  * ```
  * @example
- * ```js
+ * ```ts
  * // With vendor option
  * const dirs = projectDirs('my-app', { vendor: 'My Org' });
- * console.log(dirs.config);
- * // Linux:   '/home/user/.config/my-org/my-app'
- * // macOS:   '/Users/user/Library/Application Support/My Org/my-app'
- * // Windows: 'C:\Users\user\AppData\Local\My Org\my-app\Config'
+ * // Linux:   dirs.config => '/home/user/.config/my-org/my-app'
+ * // macOS:   dirs.config => '/Users/user/Library/Application Support/My Org/my-app'
+ * // Windows: dirs.config => 'C:\\Users\\user\\AppData\\Local\\My Org\\my-app\\Config'
+ * ```
+ * @example
+ * ```ts
+ * // With suffix option
+ * const dirs = projectDirs('my-app', { suffix: '-beta' });
+ * // Linux:   dirs.config => '/home/user/.config/my-app-beta'
  * ```
  */
 export function projectDirs(name: string, options?: ProjectDirsOptions): ProjectDirsResult;
@@ -340,12 +347,12 @@ interface ProjectUserDirsResult {
  * Each value is the user directory path with the app name appended as a subdirectory.
  * @param name - Application name used to derive directory paths
  * @example
- * ```js
- * const { projectUserDirs } = require('os-user-dirs');
+ * ```ts
+ * import { projectUserDirs } from 'os-user-dirs';
  * const dirs = projectUserDirs('my-app');
- * console.log(dirs.downloads); // '/home/user/Downloads/my-app'
- * console.log(dirs.documents); // '/home/user/Documents/my-app'
- * console.log(dirs.desktop);   // '/home/user/Desktop/my-app'
+ * // dirs.downloads => '/home/user/Downloads/my-app'
+ * // dirs.documents => '/home/user/Documents/my-app'
+ * // dirs.desktop   => '/home/user/Desktop/my-app'
  * ```
  */
 export function projectUserDirs(name: string): ProjectUserDirsResult;
@@ -356,9 +363,9 @@ export function projectUserDirs(name: string): ProjectUserDirsResult;
  * macOS: `~/.Trash`
  * Windows: `null` (Recycle Bin requires Shell API)
  * @example
- * ```js
- * const { trashDir } = require('os-user-dirs');
- * console.log(trashDir());
+ * ```ts
+ * import { trashDir } from 'os-user-dirs';
+ * const dir = trashDir();
  * // Linux:   '/home/user/.local/share/Trash'
  * // macOS:   '/Users/user/.Trash'
  * // Windows: null
@@ -372,12 +379,12 @@ export function trashDir(): string | null;
  * macOS: `~/Applications`
  * Windows: `%APPDATA%/Microsoft/Windows/Start Menu/Programs`
  * @example
- * ```js
- * const { applicationsDir } = require('os-user-dirs');
- * console.log(applicationsDir());
+ * ```ts
+ * import { applicationsDir } from 'os-user-dirs';
+ * const dir = applicationsDir();
  * // Linux:   '/home/user/.local/share/applications'
  * // macOS:   '/Users/user/Applications'
- * // Windows: 'C:\Users\user\AppData\Roaming\Microsoft\Windows\Start Menu\Programs'
+ * // Windows: 'C:\\Users\\user\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs'
  * ```
  */
 export function applicationsDir(): string;
@@ -388,10 +395,10 @@ export function applicationsDir(): string;
  * @param configPath - Optional path to user-dirs.dirs config file
  * @returns The resolved directory path, or null if not found
  * @example
- * ```js
- * const { getXDGUserDir } = require('os-user-dirs');
- * console.log(getXDGUserDir('XDG_DOWNLOAD_DIR')); // '/home/user/Downloads'
- * console.log(getXDGUserDir('XDG_DESKTOP_DIR'));   // '/home/user/Desktop'
+ * ```ts
+ * import { getXDGUserDir } from 'os-user-dirs';
+ * const dir = getXDGUserDir('XDG_DOWNLOAD_DIR'); // '/home/user/Downloads'
+ * const dir2 = getXDGUserDir('XDG_DESKTOP_DIR'); // '/home/user/Desktop'
  * ```
  */
 export function getXDGUserDir(key: string, configPath?: string): string | null;
@@ -401,10 +408,10 @@ export function getXDGUserDir(key: string, configPath?: string): string | null;
  * @param dirPath - The directory path to ensure exists
  * @returns The directory path
  * @example
- * ```js
- * const { ensureDirSync } = require('os-user-dirs');
- * const dir = ensureDirSync('/tmp/my-app/data');
- * console.log(dir); // '/tmp/my-app/data'
+ * ```ts
+ * import { ensureDirSync, configDir } from 'os-user-dirs';
+ * const dir = ensureDirSync(configDir() + '/my-app');
+ * // Creates the directory if it doesn't exist and returns the path
  * ```
  */
 export function ensureDirSync(dirPath: string): string;
@@ -414,10 +421,10 @@ export function ensureDirSync(dirPath: string): string;
  * @param dirPath - The directory path to ensure exists
  * @returns A promise that resolves with the directory path
  * @example
- * ```js
- * const { ensureDir } = require('os-user-dirs');
- * const dir = await ensureDir('/tmp/my-app/data');
- * console.log(dir); // '/tmp/my-app/data'
+ * ```ts
+ * import { ensureDir, cacheDir } from 'os-user-dirs';
+ * const dir = await ensureDir(cacheDir() + '/my-app');
+ * // Creates the directory if it doesn't exist and returns the path
  * ```
  */
 export function ensureDir(dirPath: string): Promise<string>;
